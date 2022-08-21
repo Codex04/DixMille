@@ -9,33 +9,9 @@
                             Selected=@RefreshUi />
             }
         </MudPaper>
-        <MudPaper Square Color=@Color.Primary Class="pa-5">
-            <MudStack>
-                <MudButton Color=@Color.Primary
-                           Variant="Variant.Filled"
-                           @onclick=@(() => _dialogIsVisible = true) 
-                           Style="width: 100%">
-                    Add
-                </MudButton>
-                <MudStack Row>
-                    <AddScoreButton Score=50 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=100 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=400 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=500 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=1000 ScoreChanged=@RefreshUi />
-                </MudStack>
-                <MudStack Row>
-                    <AddScoreButton Score=-50 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=-100 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=-400 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=-500 ScoreChanged=@RefreshUi />
-                    <AddScoreButton Score=-1000 ScoreChanged=@RefreshUi />
-                </MudStack>
-            </MudStack>
-        </MudPaper>
-    </MudStack>
 
-    <AddPlayer Created=@RefreshUi @bind-IsVisible=@_dialogIsVisible />
+        <FooterBar ScoreChanged=@RefreshUi PlayerAdded=@RefreshUi/>
+    </MudStack>
 </CascadingValue>
 
 <style>
@@ -59,7 +35,6 @@
 @code{
     public List<Player> Players { get; set; } = new();
     public Player? SelectedPlayer { get; set; } = new();
-    private bool _dialogIsVisible;
 
     private Task RefreshUi() => InvokeAsync(StateHasChanged);
 }
