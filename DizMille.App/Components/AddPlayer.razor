@@ -1,0 +1,51 @@
+﻿<MudDialog @bind-IsVisible=@IsVisible Options=@_dialogOptions>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon=@Icons.Material.Filled.Edit Class="mr-3" />
+            Add player
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField T=@string @bind-Text=@_newPlayerName 
+                      Class="mt-3" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick=@CreatePlayerAsync
+                   Class="px-10">
+            Ok
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick=@(() => IsVisible = false)
+                   Class="px-10">
+            Close
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+    private DialogOptions _dialogOptions = new() { FullWidth = true };
+    private string _newPlayerName = string.Empty;
+
+    [CascadingParameter] public List<Player> Players { get; set; }
+
+    [Parameter] public bool IsVisible { get; set; }
+
+    [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
+
+    [Parameter] public EventCallback<Player> Created { get; set; }
+
+    private async Task CreatePlayerAsync()
+    {
+        var newPlayer = new Player() { Name = _newPlayerName, IsSelected = true };
+        Players.ForEach(player => player.IsSelected = false);
+        Players.Add(newPlayer);
+
+        IsVisible = false;
+        _newPlayerName = string.Empty;
+        await IsVisibleChanged.InvokeAsync(IsVisible);
+        await Created.InvokeAsync(newPlayer);
+    }
+}

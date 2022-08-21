@@ -1,0 +1,54 @@
+﻿@using System.Diagnostics
+<MudButton Variant=Variant.Filled
+           Color=@Color
+           Size=@Size.Large
+           OnClick=@OnScoreAddedAsync
+           FullWidth
+           Class="px-5">
+    @Score
+</MudButton>
+
+@code{
+    private Stopwatch _stopwatch = Stopwatch.StartNew();
+
+    private TimeSpan? _lastAdd;
+
+    private int _currentScoreAdded;
+
+    [Inject] ISnackbar Snackbar { get; set; } = default!;
+
+    [CascadingParameter] public List<Player> Players { get; set; }
+
+    [Parameter] public int Score { get; set; }
+
+    [Parameter] public EventCallback ScoreChanged { get; set; }
+
+    private Color Color => Score >= 0 ? Color.Success : Color.Error;
+
+    private readonly TimeSpan NotifDuration = TimeSpan.FromMilliseconds(500);
+
+    private async Task OnScoreAddedAsync()
+    {
+        Notify();
+        var selectedPlayer = Players.FirstOrDefault(player => player.IsSelected);
+        if (selectedPlayer is null)
+            return;
+        selectedPlayer.Score += Score;
+        await ScoreChanged.InvokeAsync();
+    }
+
+    private void Notify()
+    {
+        var elapsed = _stopwatch.Elapsed;
+        _currentScoreAdded = (_lastAdd is not null && elapsed - _lastAdd < NotifDuration)
+            ? _currentScoreAdded + Score : Score;
+
+        _lastAdd = elapsed;
+
+        Snackbar.Clear();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.ShowTransitionDuration = 100;
+
+        Snackbar.Add(_currentScoreAdded.ToString(), Severity.Normal);
+    }
+}
