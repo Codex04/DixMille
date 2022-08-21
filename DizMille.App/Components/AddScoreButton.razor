@@ -1,15 +1,14 @@
 ﻿@using System.Diagnostics
 <MudButton Variant=Variant.Filled
            Color=@Color
-           Size=@Size.Large
+           Size=@Size.Medium
            OnClick=@OnScoreAddedAsync
-           FullWidth
-           Class="px-5">
+           FullWidth>
     @Score
 </MudButton>
 
 @code{
-    [CascadingParameter] public List<Player> Players { get; set; }
+    [CascadingParameter] public List<Player> Players { get; set; } = default!;
 
     [Parameter] public int Score { get; set; }
 

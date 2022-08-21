@@ -17,7 +17,7 @@
 </style>
 
 @code{
-    [CascadingParameter] public List<Player> Players { get; set; }
+    [CascadingParameter] public List<Player> Players { get; set; } = default!;
 
     [Parameter] public Player Player { get; set; } = default!;
 
