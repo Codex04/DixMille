@@ -7,13 +7,16 @@
     </TitleContent>
     <DialogContent>
         <MudTextField T=@string @bind-Text=@_newPlayerName 
+                      AutoFocus 
+                      Immediate
                       Class="mt-3" />
     </DialogContent>
     <DialogActions>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    OnClick=@CreatePlayerAsync
-                   Class="px-10">
+                   Class="px-10"
+                   Disabled=@ValidationDisabled>
             Ok
         </MudButton>
         <MudButton Variant="Variant.Filled"
@@ -29,13 +32,17 @@
     private DialogOptions _dialogOptions = new() { FullWidth = true };
     private string _newPlayerName = string.Empty;
 
-    [CascadingParameter] public List<Player> Players { get; set; }
+    [CascadingParameter] public List<Player> Players { get; set; } = default!;
 
     [Parameter] public bool IsVisible { get; set; }
 
     [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
 
     [Parameter] public EventCallback<Player> Created { get; set; }
+
+    private bool ValidationDisabled 
+        => string.IsNullOrEmpty(_newPlayerName) 
+        || Players.Select(player => player.Name).Contains(_newPlayerName);
 
     private async Task CreatePlayerAsync()
     {
@@ -48,4 +55,6 @@
         await IsVisibleChanged.InvokeAsync(IsVisible);
         await Created.InvokeAsync(newPlayer);
     }
+
+    private Task RefreshUi() => InvokeAsync(StateHasChanged);
 }
