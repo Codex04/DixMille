@@ -1,29 +1,33 @@
-name: gh-pages
-
-on: [push]
+name: 'Publish application'
+on: push
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+        # Checkout the code
+        - uses: actions/checkout@v2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0.400-preview.22301.10'
-        include-prerelease: true
+        # Install .NET SDK
+        - name: Setup .NET SDK
+          uses: actions/setup-dotnet@v2
+          with:
+            dotnet-version: '6.0.x'
 
-    - name: Publish with dotnet
-      run: dotnet publish DizMille.App/DizMille.App.csproj --configuration Release --output build
+        # Generate the website
+        - name: Publish
+          run: dotnet publish DizMille.App/DizMille.App.csproj --configuration Release
 
-    - name: Deploy to Github Pages
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        BASE_BRANCH: development # The branch the action should deploy from.
-        BRANCH: main # The branch the action should deploy to.
-        FOLDER: build/wwwroot # The folder the action should deploy.
-        SINGLE_COMMIT: true
+        # Publish the website
+        - name: GitHub Pages action
+          if: ${{ github.ref == 'refs/heads/main' }} # Publish only when the push is on main
+          uses: peaceiris/actions-gh-pages@v3.6.1
+          with:
+            github_token: ${{ secrets.PUBLISH_TOKEN }}
+            publish_branch: gh-pages
+            publish_dir: bin/Release/netstandard2.1/publish/wwwroot
+            allow_empty_commit: false
+            keep_files: false
+            force_orphan: true
+            # TODO uncomment the following line if you have a custom domain name
+            # cname: demo.meziantou.net
