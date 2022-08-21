@@ -56,13 +56,6 @@ main[b-opg5lwjkbt] {
         flex-direction: row;
     }
 
-    .sidebar[b-opg5lwjkbt] {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
     .top-row[b-opg5lwjkbt] {
         position: sticky;
         top: 0;
