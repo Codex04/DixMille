@@ -1,8 +1,10 @@
 name: 'Publish application'
-on: push
+on: 
+    push:
+        branches: [ main ]
 
 jobs:
-  build:
+  deploy-to-github-pages:
     runs-on: ubuntu-latest
     steps:
         # Checkout the code
@@ -10,24 +12,25 @@ jobs:
 
         # Install .NET SDK
         - name: Setup .NET SDK
-          uses: actions/setup-dotnet@v2
+          uses: actions/setup-dotnet@v1
           with:
-            dotnet-version: '6.0.x'
+            dotnet-version: '6.0.5'
 
         # Generate the website
         - name: Publish
-          run: dotnet publish DizMille.App/DizMille.App.csproj --configuration Release
+          run: dotnet publish -c Release -o release --nologo
 
-        # Publish the website
-        - name: GitHub Pages action
-          if: ${{ github.ref == 'refs/heads/main' }} # Publish only when the push is on main
-          uses: peaceiris/actions-gh-pages@v3.6.1
+        # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
+        - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
+          run: sed -i 's/<base href="\/" \/>/<base href="\/DizMille.App\/" \/>/g' release/wwwroot/index.html
+
+        # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
+        - name: Add .nojekyll file
+          run: touch release/wwwroot/.nojekyll
+      
+        - name: Commit wwwroot to GitHub Pages
+          uses: JamesIves/github-pages-deploy-action@4.4.0
           with:
-            github_token: ${{ secrets.PUBLISH_TOKEN }}
-            publish_branch: gh-pages
-            publish_dir: bin/Release/netstandard2.1/publish/wwwroot
-            allow_empty_commit: false
-            keep_files: false
-            force_orphan: true
-            # TODO uncomment the following line if you have a custom domain name
-            # cname: demo.meziantou.net
+            GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+            BRANCH: gh-pages
+            FOLDER: release/wwwroot
