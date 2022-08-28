@@ -2,12 +2,12 @@
   "cacheBootResources": true,
   "config": [ ],
   "debugBuild": false,
-  "entryAssembly": "DizMille.App",
+  "entryAssembly": "DixMille.App",
   "icuDataMode": 0,
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "DizMille.App.dll": "sha256-QIkm7PiyX4Z44jOj4zC+3GpknPCVHixsngH8XLG6TUY=",
+      "DixMille.App.dll": "sha256-dy0\/46GYI4gUNZ+TqB\/nHdQGkmtxD1VPMBlBf67Fez4=",
       "Microsoft.AspNetCore.Components.dll": "sha256-p\/6dJD89cvKpx7MrQw2IqlO0sJqU9nYcWPRJXFbPXUE=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-Q0WfAaL4xETTlDPDiVgqRm3lLKRHbcUGKmkDYv\/\/P6M=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-xxt8ud1usnUQwxo5sLp4D81pDDxJSXZ7sKTiUn0oQks=",
