@@ -1,4 +1,4 @@
-﻿namespace DizMille.App.Data
+﻿namespace DixMille.App.Data
 {
     public class Player
     {

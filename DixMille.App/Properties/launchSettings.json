@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "DizMille": {
+    "DixMille": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
