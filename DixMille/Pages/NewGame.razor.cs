@@ -19,10 +19,21 @@ public partial class NewGame
         ResetNewPlayerState();
     }
     
-    private void OnStartNewGameClicked()
+    private async Task OnStartNewGameClickedAsync()
     {
-        var gameId = 1; // Get an unused game id
-        NavigationManager.NavigateTo($"game/{gameId}");
+        var keys = await LocalStorageService.KeysAsync();
+        var gameIds = keys
+            .Where(key => key.StartsWith("game-"))
+            .Select(key => int.Parse(key.Replace("game-", string.Empty)))
+            .ToArray();
+        var newGameId = gameIds.Any() ? gameIds.Max() + 1 : 1;
+        var newGame = new GameState()
+        {
+            Id = newGameId, 
+            Players = _players.ToArray(),
+        };
+        await LocalStorageService.SetItemAsync($"game-{newGame.Id}", newGame);
+        NavigationManager.NavigateTo($"game/{newGame.Id}");
     }
 
     private void ResetNewPlayerState()

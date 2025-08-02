@@ -1,9 +1,29 @@
 @page "/game/{GameId:int}"
 
+@if (_game is null)
+{
+    <span>Oopsi, on dirait qu'il y a un problème</span>
+    return;
+}
+
 <div id="game">
     <MudText>Dix-Mille</MudText>
 
-    @GameId
+    <div id="players-list">
+        @foreach (var player in _game.Players)
+        {
+            <MudPaper Elevation="2" Outlined="true">
+                <div class="player">
+                    <MudText>
+                        @player.Name
+                    </MudText>
+                    <MudText>
+                        @player.Score
+                    </MudText>
+                </div>
+            </MudPaper>
+        }
+    </div>
 </div>
 
 

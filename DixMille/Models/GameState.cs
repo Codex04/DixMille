@@ -2,6 +2,6 @@ namespace DixMille.Models;
 
 public class GameState
 {
-    public int Id { get; init; }
-    public Player[] Players { get; init; } = [];
+    public required int Id { get; init; }
+    public required Player[] Players { get; init; } = [];
 }
