@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "DixMille",
   "resources": {
-    "hash": "sha256-Zxc2RnZ4FxvEKutMmU+sQIugko3/AM43JC+HSboIn2k=",
+    "hash": "sha256-NUAOVyksQhHY4RZLYnDi3PdUJ7QqcX106IAMhCdQZhk=",
     "fingerprinting": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "Blazored.LocalStorage.wasm",
-      "Microsoft.AspNetCore.Components.8duoxhls0v.wasm": "Microsoft.AspNetCore.Components.wasm",
+      "Microsoft.AspNetCore.Components.2xqyx5453c.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Forms.bccwmurmxd.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
       "Microsoft.AspNetCore.Components.Web.95ftpxa1sk.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.5nhv0jic9d.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
@@ -46,7 +46,7 @@
       "System.Threading.acwnquwc9t.wasm": "System.Threading.wasm",
       "System.wznexm8bk2.wasm": "System.wasm",
       "System.Private.CoreLib.2jcsmepxpr.wasm": "System.Private.CoreLib.wasm",
-      "DixMille.1vkai4pr43.wasm": "DixMille.wasm",
+      "DixMille.b7keiglp2f.wasm": "DixMille.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.st0ovrfdhi.js": "dotnet.native.js",
       "dotnet.native.67rumul467.wasm": "dotnet.native.wasm",
@@ -75,7 +75,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "sha256-OaMAAd5n7ORfyur5e3QIyEVKJ76MKIvwbg7/icnnYcU=",
-      "Microsoft.AspNetCore.Components.8duoxhls0v.wasm": "sha256-vKQLOiq+4fcgmdw93uOj4QsEU2MV08AFfNnLLirX1kk=",
+      "Microsoft.AspNetCore.Components.2xqyx5453c.wasm": "sha256-xjGi3o4VOeImbiYgFSi+dhtQTCx04yjatPkzDmENTyI=",
       "Microsoft.AspNetCore.Components.Forms.bccwmurmxd.wasm": "sha256-e0SPTkFa6ZFZXMGOpkjbUif3KdwxtRCuOZLMYYVtR8M=",
       "Microsoft.AspNetCore.Components.Web.95ftpxa1sk.wasm": "sha256-E1GatDap+lqQkZFkkEOTzBTw8JhNvplVO82NQhlsnls=",
       "Microsoft.AspNetCore.Components.WebAssembly.5nhv0jic9d.wasm": "sha256-Ebc3wgBbbpwGo1EPqW+rZpMTqoqAC6gsiBS0Bk+1wLY=",
@@ -115,7 +115,7 @@
       "System.Text.RegularExpressions.g7mnwzwuqv.wasm": "sha256-1CPDp3yRhhCdtIz4/c8LJYAtzkmgv9aL3j6blrpGCh0=",
       "System.Threading.acwnquwc9t.wasm": "sha256-hmq7E5RBDuX9WHoN8bZjejvmxHmSFsAk0rO4O+E/LOg=",
       "System.wznexm8bk2.wasm": "sha256-/Imz/Enqa2AZc4T3k/CqtsM6674KRN9OUtvK4Nokhew=",
-      "DixMille.1vkai4pr43.wasm": "sha256-40VXoeWQTEurBlN4UdXGxzACPeOxl8qkwzDaMVC/dKw="
+      "DixMille.b7keiglp2f.wasm": "sha256-OYB/wbm7LKHA6OvdODBh6g7mfS9f0vo8OHHGBzsHdkM="
     }
   },
   "cacheBootResources": true,

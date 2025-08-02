@@ -78,8 +78,15 @@ main[b-2sxllpohzm] {
     }
 }
 
+/* /Pages/Game.razor.rz.scp.css */
+#game[b-stnt9b1uua]{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+}
 /* /Pages/Home.razor.rz.scp.css */
-#dix-mille[b-6hn9peq3pa]{
+#home[b-6hn9peq3pa]{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -103,11 +110,19 @@ main[b-2sxllpohzm] {
 }
 
 #player-list[b-1skptmcujf]{
-    
+    display: flex;
+    width: 100%;
+    flex-direction: column;
 }
 
 #new-player-field[b-1skptmcujf] {
     display: flex;
     align-items: center;
     gap: 14px;
+}
+
+.player[b-1skptmcujf] {
+    display: flex;
+    height: 30px;
+    padding: 3px;
 }
