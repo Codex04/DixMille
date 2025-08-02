@@ -11,29 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v3
     
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 9.0.x
         
     - name: Publish with dotnet
-      run: dotnet publish --configuration Release --output build
+      run: dotnet publish --configuration Release --output ./publish
       
     # changes the base-tag in index.html from '/' to 'DixMille' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to DixMille
-      run: sed -i 's/<base href="\/" \/>/<base href="\/DixMille\/" \/>/g' build/wwwroot/index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/DixMille\/" \/>/g' publish/wwwroot/index.html
       
-    # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
-    - name: Add .nojekyll file
-      run: touch build/wwwroot/.nojekyll
-      
-    - name: Deploy to Github Pages
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BASE_BRANCH: main # The branch the action should deploy from.
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: build/wwwroot # The folder the action should deploy.
-        SINGLE_COMMIT: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./publish/wwwroot
+        publish_branch: gh-pages
+        user_name: github-actions
+        user_email: github-actions@github.com
