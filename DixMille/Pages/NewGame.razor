@@ -6,13 +6,19 @@
     <div id="player-list">
         @foreach (var player in _players)
         {
-            <MudPaper Class="pa-16 ma-2" Elevation="0">
-                <MudText>@player.Name</MudText>
+            <MudPaper Elevation="2" Outlined="true" >
+                <div class="player">
+                    <MudText>@player.Name</MudText>
+                </div>
             </MudPaper>
         }
         <div id="new-player-field">
-            <MudTextField @bind-Value="@_newPlayerName" Label="Nom du joueur" Variant="Variant.Outlined" Margin="Margin.Dense" />
-            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@OnAddNewPlayerClicked" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" />
+            <MudTextField @bind-Value="@_newPlayerName" Label="Nom du nouveau joueur" 
+                          Variant="Variant.Outlined" Margin="Margin.Dense" 
+                          Immediate/>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@OnAddNewPlayerClicked" 
+                           Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
+                           Disabled="@(_players.Any(player => player.Name.Equals(_newPlayerName, StringComparison.OrdinalIgnoreCase)))"/>
         </div>
     </div>
     

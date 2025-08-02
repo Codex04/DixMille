@@ -7,11 +7,19 @@
 }
 
 #player-list{
-    
+    display: flex;
+    width: 100%;
+    flex-direction: column;
 }
 
 #new-player-field {
     display: flex;
     align-items: center;
     gap: 14px;
+}
+
+.player {
+    display: flex;
+    height: 30px;
+    padding: 3px;
 }
