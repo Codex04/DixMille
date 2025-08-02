@@ -10,14 +10,14 @@ public partial class Home
     
     [Inject] public GameService GameService { get; set; } = null!;
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        //await LocalStorageService.SetItemAsync("name", "John Smith");
-    }
-
+    private void OnNewGameClicked()
+        => NavigationManager.NavigateTo("new-game");
+    
     private async Task LoadStorageAsync()
     {
+        await LocalStorageService.SetItemAsync("name", "John Smith");
         Name = await LocalStorageService.GetItemAsync<string>("name") ?? "Not found";
         await InvokeAsync(StateHasChanged);
     }

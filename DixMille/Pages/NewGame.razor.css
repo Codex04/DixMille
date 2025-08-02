@@ -1,0 +1,17 @@
+#new-game {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#player-list{
+    
+}
+
+#new-player-field {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}

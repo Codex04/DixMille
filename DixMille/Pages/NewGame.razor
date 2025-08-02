@@ -1,0 +1,24 @@
+@page "/new-game"
+
+<div id="new-game">
+    <MudText>Nouvelle Partie</MudText>
+
+    <div id="player-list">
+        @foreach (var player in _players)
+        {
+            <MudPaper Class="pa-16 ma-2" Elevation="0">
+                <MudText>@player.Name</MudText>
+            </MudPaper>
+        }
+        <div id="new-player-field">
+            <MudTextField @bind-Value="@_newPlayerName" Label="Nom du joueur" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@OnAddNewPlayerClicked" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" />
+        </div>
+    </div>
+    
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+               OnClick="@OnStartNewGameClicked"
+               Disabled="@(_players.Count < 2)">
+        Commencer la partie
+    </MudButton>
+</div>
