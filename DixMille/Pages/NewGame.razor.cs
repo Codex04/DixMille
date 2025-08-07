@@ -6,17 +6,21 @@ namespace DixMille.Pages;
 
 public partial class NewGame
 {
-    private List<Player> _players = new();
-    
-    private string _newPlayerName = string.Empty;
+    private readonly List<Player> _players = new();
+
+    private Player _newPlayer = new();
     
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
 
-    private void OnAddNewPlayerClicked()
+    private bool IsNewPlayerNameValid => !string.IsNullOrWhiteSpace(_newPlayer.Name) && !_players.Any(player => player.Name.Equals(_newPlayer.Name, StringComparison.OrdinalIgnoreCase));
+    
+    private IEnumerable<Player> ValidPlayers => IsNewPlayerNameValid ? _players.Append(_newPlayer) : _players;
+    
+    private void AddNewPlayer()
     {
-        _players.Add(new Player { Name = _newPlayerName });
-        ResetNewPlayerState();
+        _players.Add(_newPlayer);
+        _newPlayer = new Player();
     }
     
     private async Task OnStartNewGameClickedAsync()
@@ -27,17 +31,13 @@ public partial class NewGame
             .Select(key => int.Parse(key.Replace("game-", string.Empty)))
             .ToArray();
         var newGameId = gameIds.Any() ? gameIds.Max() + 1 : 1;
+
         var newGame = new GameState()
         {
             Id = newGameId, 
-            Players = _players.ToArray(),
+            Players = ValidPlayers.ToArray(),
         };
         await LocalStorageService.SetItemAsync($"game-{newGame.Id}", newGame);
         NavigationManager.NavigateTo($"game/{newGame.Id}");
-    }
-
-    private void ResetNewPlayerState()
-    {
-        _newPlayerName = string.Empty;
     }
 }

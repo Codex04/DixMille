@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Components;
 
 namespace DixMille.Pages;
 
-public partial class Game
+public partial class AddScore
 {
     private GameState? _game;
+    private Player? _player;
     
-    [Parameter] public int GameId { get; set; }
+    [Parameter, EditorRequired] public int GameId { get; set; } = default!;
+    [Parameter, EditorRequired] public string PlayerName { get; set; } = default!;
 
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
@@ -16,10 +18,9 @@ public partial class Game
     protected override async Task OnInitializedAsync()
     {
         _game = await LocalStorageService.GetItemAsync<GameState>($"game-{GameId}");
-    }
 
-    private void OnPlayerClicked(Player player)
-    {
-        NavigationManager.NavigateTo($"game/{GameId}/add-score/{player.Name}");
+        if (_game == null)
+            return;
+        _player = _game.Players.FirstOrDefault(player => player.Name.Equals(PlayerName, StringComparison.OrdinalIgnoreCase));
     }
 }

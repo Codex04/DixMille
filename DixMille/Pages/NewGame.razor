@@ -13,18 +13,18 @@
             </MudPaper>
         }
         <div id="new-player-field">
-            <MudTextField @bind-Value="@_newPlayerName" Label="Nom du nouveau joueur" 
+            <MudTextField @bind-Value="@_newPlayer.Name" Label="Nom du nouveau joueur" 
                           Variant="Variant.Outlined" Margin="Margin.Dense" 
                           Immediate/>
-            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@OnAddNewPlayerClicked" 
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@AddNewPlayer" 
                            Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
-                           Disabled="@(_players.Any(player => player.Name.Equals(_newPlayerName, StringComparison.OrdinalIgnoreCase)))"/>
+                           Disabled="@(!IsNewPlayerNameValid)"/>
         </div>
     </div>
     
     <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
                OnClick="@OnStartNewGameClickedAsync"
-               Disabled="@(_players.Count < 2)">
+               Disabled="@(ValidPlayers.Count() < 2)">
         Commencer la partie
     </MudButton>
 </div>

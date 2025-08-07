@@ -2,6 +2,6 @@ namespace DixMille.Models;
 
 public class Player
 {
-    public required string Name { get; init; }
+    public string Name { get; set; } = string.Empty;
     public int Score { get; set; } = 0;
 }

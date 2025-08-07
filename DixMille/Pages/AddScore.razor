@@ -1,0 +1,32 @@
+@page "/game/{GameId:int}/add-score/{PlayerName}"
+@using DixMille.Components
+
+@if (_player is null)
+    return;
+
+<div id="add-score">
+    <div id="return-to-game-button">
+        <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn"/>
+    </div>
+
+    <MudText>@_player.Name</MudText>
+
+    <MudPaper Elevation="2" Outlined="true">
+        Score
+    </MudPaper>
+    <div id="numeric-keyboard">
+        <KeyboardButton>-</KeyboardButton>
+        <KeyboardButton>Backspace</KeyboardButton>
+        <KeyboardButton Number="1"/>
+        <KeyboardButton Number="2"/>
+        <KeyboardButton Number="3"/>
+        <KeyboardButton Number="4"/>
+        <KeyboardButton Number="5"/>
+        <KeyboardButton Number="6"/>
+        <KeyboardButton Number="7"/>
+        <KeyboardButton Number="8"/>
+        <KeyboardButton Number="9"/>
+        <KeyboardButton>0</KeyboardButton>
+    </div>
+</div>
+
