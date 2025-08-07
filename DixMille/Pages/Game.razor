@@ -20,17 +20,22 @@
                             <MudImage src="images/first_place_cup.png" alt="first place up" Width="50" Height="50"/>
                         }
                     </span>
-                    <MudText Class="player-name" Typo="Typo.body2">
+                    <MudText Class="player-name" Typo="Typo.h5">
                         @player.Name
                     </MudText>
                     <MudSpacer/>
-                    <MudText Class="player-score" Typo="Typo.body2">
+                    <MudText Class="player-score" Typo="Typo.h5">
                         @player.Score
                     </MudText>
                 </div>
             </MudPaper>
         }
     </div>
+    
+    @if (!string.IsNullOrWhiteSpace(_game.LastPlayerName))
+    {
+        <MudText Color="Color.Success" Typo="Typo.h5">Le dernier joueur à avoir joué est @_game.LastPlayerName</MudText>
+    }
 </div>
 
 

@@ -6,27 +6,40 @@
 
 <div id="add-score">
     <div id="return-to-game-button">
-        <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn" OnClick="@NavigateBackToGame"/>
+        <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="@NavigateBackToGame"/>
     </div>
 
-    <MudText Typo="Typo.h3">@_player.Name</MudText>
+    <MudText Typo="Typo.h4" Color="Color.Primary">Score de @_player.Name</MudText>
 
-    <MudPaper Elevation="2" Outlined="true">
-        Score
+    <MudPaper Elevation="2" Outlined="true" Class="score">
+        <MudText Typo="Typo.h5" Color="Color.Primary">@_player.Score</MudText>
+        @if (_scoreToAdd is not 0)
+        {
+            <MudText Typo="Typo.h5" Color="Color.Success">@(_isMinus ? "-" : "+")</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Success">@_scoreToAdd</MudText>
+        }
     </MudPaper>
-    <div id="numeric-keyboard">
-        <KeyboardButton>-</KeyboardButton>
-        <KeyboardButton>Backspace</KeyboardButton>
-        <KeyboardButton Number="1"/>
-        <KeyboardButton Number="2"/>
-        <KeyboardButton Number="3"/>
-        <KeyboardButton Number="4"/>
-        <KeyboardButton Number="5"/>
-        <KeyboardButton Number="6"/>
-        <KeyboardButton Number="7"/>
-        <KeyboardButton Number="8"/>
-        <KeyboardButton Number="9"/>
-        <KeyboardButton>0</KeyboardButton>
-    </div>
+    <MudPaper Class="numeric-keyboard-content">
+        <div id="numeric-keyboard">
+            <KeyboardButton MudIcon="@Icons.Material.Filled.Remove" Width="50%" OnClick="@(() => UpdateScoreToAdd('-'))"/>
+            <KeyboardButton MudIcon="@Icons.Material.Filled.Backspace" Width="50%" OnClick="@(() => UpdateScoreToAdd('\b'))"/>
+            <KeyboardButton Number="1" OnClick="@(() => UpdateScoreToAdd('1'))"/>
+            <KeyboardButton Number="2" OnClick="@(() => UpdateScoreToAdd('2'))"/>
+            <KeyboardButton Number="3" OnClick="@(() => UpdateScoreToAdd('3'))"/>
+            <KeyboardButton Number="4" OnClick="@(() => UpdateScoreToAdd('4'))"/>
+            <KeyboardButton Number="5" OnClick="@(() => UpdateScoreToAdd('5'))"/>
+            <KeyboardButton Number="6" OnClick="@(() => UpdateScoreToAdd('6'))"/>
+            <KeyboardButton Number="7" OnClick="@(() => UpdateScoreToAdd('7'))"/>
+            <KeyboardButton Number="8" OnClick="@(() => UpdateScoreToAdd('8'))"/>
+            <KeyboardButton Number="9" OnClick="@(() => UpdateScoreToAdd('9'))"/>
+            <KeyboardButton Number="0" Width="100%" OnClick="@(() => UpdateScoreToAdd('0'))"/>
+        </div>
+        <div id="save-button">
+            <MudButton Disabled="@(_scoreToAdd % 10 is not 0)" Style="height: 70px;" Color="Color.Success" FullWidth Size="Size.Large" Variant="Variant.Filled"
+                       OnClick="@SaveScoreAsync">
+                Valider
+            </MudButton>
+        </div>
+    </MudPaper>
 </div>
 

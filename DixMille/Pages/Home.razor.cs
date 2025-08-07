@@ -1,5 +1,4 @@
 using Blazored.LocalStorage;
-using DixMille.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace DixMille.Pages;
@@ -8,7 +7,6 @@ public partial class Home
 {
     private string Name { get; set; } = "Toto";
     
-    [Inject] public GameService GameService { get; set; } = null!;
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 

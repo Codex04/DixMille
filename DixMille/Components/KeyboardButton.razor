@@ -1,10 +1,12 @@
-<div id="keyboard-button">
-    @if (Number is not null)
-    {
-        <span>@Number</span>
-    }
-    else
-    {
-        @ChildContent
-    }
+<div id="keyboard-button" style="width: @Width;">
+    <MudButton Style="height: 100%;" Color="Color.Dark" Variant="Variant.Filled" Size="Size.Large" FullWidth OnClick="@OnClick">
+        @if (Number is not null)
+        {
+            @Number
+        }
+        else
+        {
+            <MudIcon Icon="@MudIcon" Color="Color.Tertiary" Size="Size.Large"/>
+        }
+    </MudButton>
 </div>
