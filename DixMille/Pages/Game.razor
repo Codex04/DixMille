@@ -7,17 +7,21 @@
 }
 
 <div id="game">
-    <MudText>Dix-Mille</MudText>
+    <MudText Typo="Typo.h1">Dix-Mille</MudText>
 
     <div id="players-list">
         @foreach (var player in _game.Players)
         {
             <MudPaper Elevation="2" Outlined="true">
-                <div class="player" @onclick="@(() => OnPlayerClicked(player))">
-                    <MudText>
+                <div class="player-row" @onclick="@(() => OnPlayerClicked(player))">
+                    <span class="ranking-icon">
+                        <MudImage src="images/first_place_cup.png" alt="first place up" Width="35" Height="35"/>
+                    </span>
+                    <MudText Class="player-name" Typo="Typo.body2">
                         @player.Name
                     </MudText>
-                    <MudText>
+                    <MudSpacer/>
+                    <MudText Class="player-score" Typo="Typo.body2">
                         @player.Score
                     </MudText>
                 </div>

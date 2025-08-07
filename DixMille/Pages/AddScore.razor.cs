@@ -23,4 +23,7 @@ public partial class AddScore
             return;
         _player = _game.Players.FirstOrDefault(player => player.Name.Equals(PlayerName, StringComparison.OrdinalIgnoreCase));
     }
+    
+    private void NavigateBackToGame()
+        => NavigationManager.NavigateTo($"game/{GameId}");
 }

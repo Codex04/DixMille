@@ -6,10 +6,10 @@
 
 <div id="add-score">
     <div id="return-to-game-button">
-        <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn"/>
+        <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn" OnClick="@NavigateBackToGame"/>
     </div>
 
-    <MudText>@_player.Name</MudText>
+    <MudText Typo="Typo.h1">@_player.Name</MudText>
 
     <MudPaper Elevation="2" Outlined="true">
         Score
