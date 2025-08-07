@@ -3,8 +3,8 @@
 <div id="new-game">
     <MudText Color="@Color.Primary" Typo="Typo.h3">Nouvelle Partie</MudText>
 
-    <MudPaper Elevation="2">
-        <div id="players-list">
+    <div id="players-list">
+        <MudPaper Elevation="2" Class="player-list-content">
             @foreach (var player in _players)
             {
                 <MudPaper Elevation="2" Outlined="true" >
@@ -21,8 +21,8 @@
                                Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
                                Disabled="@(!IsNewPlayerNameValid)"/>
             </div>
-        </div>
-    </MudPaper>
+        </MudPaper>
+    </div>
     
     <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
                OnClick="@OnStartNewGameClickedAsync"
