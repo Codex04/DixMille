@@ -52,7 +52,7 @@ public partial class AddScore
         {
             _player.Score += _scoreToAdd;
             _game.LastPlayerName = PlayerName;
-            if (_player.Score >= 10000)
+            if (_player.Score >= 10000 && string.IsNullOrEmpty(_game.WinnerPlayerName))
                 _game.WinnerPlayerName = _player.Name;
             await LocalStorageService.SetItemAsync($"game-{_game.Id}", _game);
         }
