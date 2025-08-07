@@ -50,7 +50,7 @@ public partial class AddScore
     {
         if (_game is not null && _player is not null)
         {
-            _player.Score += _scoreToAdd;
+            _player.Score += _isMinus ? -_scoreToAdd : _scoreToAdd;
             _game.LastPlayerName = PlayerName;
             if (_player.Score >= 10000 && string.IsNullOrEmpty(_game.WinnerPlayerName))
                 _game.WinnerPlayerName = _player.Name;

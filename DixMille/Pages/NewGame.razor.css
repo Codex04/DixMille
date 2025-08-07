@@ -13,6 +13,12 @@
     align-items: center;
 }
 
+#return-to-home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
 #new-player-field {
     display: flex;
     align-items: center;

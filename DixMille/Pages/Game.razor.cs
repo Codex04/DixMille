@@ -26,4 +26,7 @@ public partial class Game
     {
         NavigationManager.NavigateTo($"game/{GameId}/add-score/{player.Name}");
     }
+    
+    private void NavigateToHome()
+        =>  NavigationManager.NavigateTo(""); 
 }

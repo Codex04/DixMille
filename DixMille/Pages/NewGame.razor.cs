@@ -40,4 +40,7 @@ public partial class NewGame
         await LocalStorageService.SetItemAsync($"game-{newGame.Id}", newGame);
         NavigationManager.NavigateTo($"game/{newGame.Id}");
     }
+    
+    private void NavigateToHome()
+        =>  NavigationManager.NavigateTo(""); 
 }

@@ -6,6 +6,10 @@
     return;
 }
 
+<div id="return-to-home-button">
+    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="@NavigateToHome"/>
+</div>
+
 <div id="game" class="@(!string.IsNullOrEmpty(_game.WinnerPlayerName) ? "winning-background" : string.Empty)">
     <MudText Color="Color.Primary" Typo="Typo.h3">Dix-Mille</MudText>
     @if (!string.IsNullOrEmpty(_game.WinnerPlayerName))

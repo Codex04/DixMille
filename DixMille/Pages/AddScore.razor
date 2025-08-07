@@ -15,8 +15,8 @@
         <MudText Typo="Typo.h5" Color="Color.Primary">@_player.Score</MudText>
         @if (_scoreToAdd is not 0)
         {
-            <MudText Typo="Typo.h5" Color="Color.Success">@(_isMinus ? "-" : "+")</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Success">@_scoreToAdd</MudText>
+            <MudText Typo="Typo.h5" Color="@(_isMinus ? Color.Error : Color.Success)">@(_isMinus ? "-" : "+")</MudText>
+            <MudText Typo="Typo.h5" Color="@(_isMinus ? Color.Error : Color.Success)">@_scoreToAdd</MudText>
         }
     </MudPaper>
     <MudPaper Class="numeric-keyboard-content">
