@@ -1,6 +1,13 @@
 /* /Components/KeyboardButton.razor.rz.scp.css */
 #keyboard-button[b-ee4klt27w6] {
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+[b-ee4klt27w6] .mud-button-label {
+    font-size: 24px;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
 .page[b-2sxllpohzm] {
@@ -84,15 +91,51 @@ main[b-2sxllpohzm] {
 
 /* /Pages/AddScore.razor.rz.scp.css */
 #add-score[b-xg9bs20r3d] {
-    
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
 }
 
 #return-to-game-button[b-xg9bs20r3d] {
-    
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 
 #numeric-keyboard[b-xg9bs20r3d] {
-    
+    display: flex;
+    justify-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+[b-xg9bs20r3d] h5 {
+    line-height: 60px !important;
+}
+
+[b-xg9bs20r3d] .score {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+}
+
+[b-xg9bs20r3d] .numeric-keyboard-content{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 30px;
+}
+
+#save-button[b-xg9bs20r3d] {
+    padding: 10px;
 }
 /* /Pages/Game.razor.rz.scp.css */
 #game[b-stnt9b1uua]{
@@ -125,7 +168,7 @@ main[b-2sxllpohzm] {
     height: 60px;
 }
 
-.player-row[b-stnt9b1uua]  p {
+.player-row[b-stnt9b1uua]  h5 {
     line-height: 60px;
 }
 
@@ -136,7 +179,7 @@ main[b-2sxllpohzm] {
 
 [b-stnt9b1uua] .player-score {
     font-weight: bold;
-    margin: 0 10px;
+    margin: 0 20px;
 }
 /* /Pages/Home.razor.rz.scp.css */
 #home[b-6hn9peq3pa]{
