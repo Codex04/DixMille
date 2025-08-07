@@ -111,9 +111,32 @@ main[b-2sxllpohzm] {
     gap: 10px;
 }
 
-.player[b-stnt9b1uua]{
+.player-row[b-stnt9b1uua]{
     display: flex;
     gap: 10px;
+    height: 40px;
+}
+
+.ranking-icon[b-stnt9b1uua]{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.player-row[b-stnt9b1uua]  p {
+    line-height: 40px;
+}
+
+[b-stnt9b1uua] .player-name {
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+[b-stnt9b1uua] .player-score {
+    font-weight: bold;
+    margin: 0 10px;
 }
 /* /Pages/Home.razor.rz.scp.css */
 #home[b-6hn9peq3pa]{
