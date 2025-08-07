@@ -6,8 +6,12 @@
     return;
 }
 
-<div id="game">
+<div id="game" class="@(!string.IsNullOrEmpty(_game.WinnerPlayerName) ? "winning-background" : string.Empty)">
     <MudText Color="Color.Primary" Typo="Typo.h3">Dix-Mille</MudText>
+    @if (!string.IsNullOrEmpty(_game.WinnerPlayerName))
+    {
+        <MudText Color="Color.Primary" Typo="Typo.h4">Félicitation @_game.WinnerPlayerName a gagné!</MudText>
+    }
 
     <div id="players-list">
         @foreach (var player in _game.Players)

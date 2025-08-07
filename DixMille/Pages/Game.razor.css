@@ -14,6 +14,12 @@
     gap: 10px;
 }
 
+.winning-background {
+    background-image: url("/images/firework.gif");
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-blend-mode: overlay;
+}
+
 .player-row{
     display: flex;
     gap: 10px;
