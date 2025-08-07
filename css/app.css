@@ -2,6 +2,12 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+body {
+    background-image: url("/images/background.png");
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-blend-mode: overlay;
+}
+
 h1:focus {
     outline: none;
 }
@@ -111,4 +117,12 @@ code {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+::deep .mud-paper {
+    background-color: #ebebeb !important;
+}
+
+::deep .mud-typography-h3 {
+    font-weight: bold;
 }

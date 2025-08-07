@@ -148,10 +148,19 @@ main[b-2sxllpohzm] {
 
 #navigation-buttons[b-6hn9peq3pa] {
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
+    width: 100%;
+}
+
+[b-6hn9peq3pa] .navigation-buttons-content{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 35px;
+    padding: 30px;
+    width: 80%;
 }
 /* /Pages/NewGame.razor.rz.scp.css */
 #new-game[b-1skptmcujf] {
