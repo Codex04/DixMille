@@ -1,3 +1,7 @@
+/* /Components/KeyboardButton.razor.rz.scp.css */
+#keyboard-button[b-ee4klt27w6] {
+    
+}
 /* /Layout/MainLayout.razor.rz.scp.css */
 .page[b-2sxllpohzm] {
     position: relative;
@@ -78,6 +82,18 @@ main[b-2sxllpohzm] {
     }
 }
 
+/* /Pages/AddScore.razor.rz.scp.css */
+#add-score[b-xg9bs20r3d] {
+    
+}
+
+#return-to-game-button[b-xg9bs20r3d] {
+    
+}
+
+#numeric-keyboard[b-xg9bs20r3d] {
+    
+}
 /* /Pages/Game.razor.rz.scp.css */
 #game[b-stnt9b1uua]{
     display: flex;
