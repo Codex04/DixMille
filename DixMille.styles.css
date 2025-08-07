@@ -114,19 +114,19 @@ main[b-2sxllpohzm] {
 .player-row[b-stnt9b1uua]{
     display: flex;
     gap: 10px;
-    height: 40px;
+    height: 60px;
 }
 
 .ranking-icon[b-stnt9b1uua]{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 }
 
 .player-row[b-stnt9b1uua]  p {
-    line-height: 40px;
+    line-height: 60px;
 }
 
 [b-stnt9b1uua] .player-name {
@@ -175,6 +175,7 @@ main[b-2sxllpohzm] {
     display: flex;
     width: 100%;
     flex-direction: column;
+    align-items: center;
 }
 
 #new-player-field[b-1skptmcujf] {
@@ -187,4 +188,13 @@ main[b-2sxllpohzm] {
     display: flex;
     height: 30px;
     padding: 3px;
+}
+
+[b-1skptmcujf] .player-list-content{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    gap: 10px;
 }
