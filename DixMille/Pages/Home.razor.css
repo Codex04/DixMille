@@ -7,8 +7,17 @@
 
 #navigation-buttons {
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
+    width: 100%;
+}
+
+::deep .navigation-buttons-content{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 35px;
+    padding: 30px;
+    width: 80%;
 }

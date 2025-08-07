@@ -1,26 +1,28 @@
 @page "/new-game"
 
 <div id="new-game">
-    <MudText Typo="Typo.h1">Nouvelle Partie</MudText>
+    <MudText Color="@Color.Primary" Typo="Typo.h3">Nouvelle Partie</MudText>
 
-    <div id="players-list">
-        @foreach (var player in _players)
-        {
-            <MudPaper Elevation="2" Outlined="true" >
-                <div class="player">
-                    <MudText>@player.Name</MudText>
-                </div>
-            </MudPaper>
-        }
-        <div id="new-player-field">
-            <MudTextField @bind-Value="@_newPlayer.Name" Label="Nom du nouveau joueur" 
-                          Variant="Variant.Outlined" Margin="Margin.Dense" 
-                          Immediate/>
-            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@AddNewPlayer" 
-                           Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
-                           Disabled="@(!IsNewPlayerNameValid)"/>
+    <MudPaper Elevation="2">
+        <div id="players-list">
+            @foreach (var player in _players)
+            {
+                <MudPaper Elevation="2" Outlined="true" >
+                    <div class="player">
+                        <MudText>@player.Name</MudText>
+                    </div>
+                </MudPaper>
+            }
+            <div id="new-player-field">
+                <MudTextField @bind-Value="@_newPlayer.Name" Label="Nom du nouveau joueur" 
+                              Variant="Variant.Outlined" Margin="Margin.Dense" 
+                              Immediate/>
+                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="@AddNewPlayer" 
+                               Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
+                               Disabled="@(!IsNewPlayerNameValid)"/>
+            </div>
         </div>
-    </div>
+    </MudPaper>
     
     <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
                OnClick="@OnStartNewGameClickedAsync"

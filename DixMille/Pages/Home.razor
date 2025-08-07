@@ -1,11 +1,13 @@
 ﻿@page "/"
 
 <div id="home">
-    <MudText Typo="Typo.h1">Dix-Mille</MudText>
+    <MudText Color="Color.Primary" Typo="Typo.h3">Dix-Mille</MudText>
 
     <div id="navigation-buttons">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnNewGameClicked">Nouvelle partie</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled>Reprendre une partie</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Disabled>Historique</MudButton>
+        <MudPaper Elevation="2" Class="navigation-buttons-content">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow OnClick="@OnNewGameClicked">Nouvelle partie</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow Disabled>Reprendre une partie</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow Disabled>Historique</MudButton>
+        </MudPaper>
     </div>
 </div>

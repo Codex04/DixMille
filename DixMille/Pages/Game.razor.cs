@@ -18,6 +18,9 @@ public partial class Game
         _game = await LocalStorageService.GetItemAsync<GameState>($"game-{GameId}");
     }
 
+    private bool ShouldDisplayCup(Player player)
+        => player.Score is not 0 && _game?.Players.MaxBy(p => p.Score)?.Score == player.Score;
+
     private void OnPlayerClicked(Player player)
     {
         NavigationManager.NavigateTo($"game/{GameId}/add-score/{player.Name}");

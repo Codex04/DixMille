@@ -7,7 +7,7 @@
 }
 
 <div id="game">
-    <MudText Typo="Typo.h1">Dix-Mille</MudText>
+    <MudText Color="Color.Primary" Typo="Typo.h3">Dix-Mille</MudText>
 
     <div id="players-list">
         @foreach (var player in _game.Players)
@@ -15,7 +15,10 @@
             <MudPaper Elevation="2" Outlined="true">
                 <div class="player-row" @onclick="@(() => OnPlayerClicked(player))">
                     <span class="ranking-icon">
-                        <MudImage src="images/first_place_cup.png" alt="first place up" Width="35" Height="35"/>
+                        @if (ShouldDisplayCup(player))
+                        {
+                            <MudImage src="images/first_place_cup.png" alt="first place up" Width="35" Height="35"/>
+                        }
                     </span>
                     <MudText Class="player-name" Typo="Typo.body2">
                         @player.Name
