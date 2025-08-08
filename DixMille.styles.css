@@ -193,6 +193,19 @@ main[b-2sxllpohzm] {
     font-weight: bold;
     margin: 0 20px;
 }
+/* /Pages/History.razor.rz.scp.css */
+#history[b-e3vgmlbkxr] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+#return-to-home-button[b-e3vgmlbkxr] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
 /* /Pages/Home.razor.rz.scp.css */
 #home[b-6hn9peq3pa]{
     display: flex;
