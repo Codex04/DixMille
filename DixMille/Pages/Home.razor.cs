@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using DixMille.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace DixMille.Pages;
@@ -6,17 +7,34 @@ namespace DixMille.Pages;
 public partial class Home
 {
     private string Name { get; set; } = "Toto";
+    private GameState? _lastNotFinishedGame;
     
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-    private void OnNewGameClicked()
+    protected override async Task OnInitializedAsync()
+    {
+        var gameKeys = await LocalStorageService.KeysAsync();
+        var gameIds = gameKeys
+            .Where(key => key.StartsWith("game-"))
+            .Select(key => key.Replace("game-", string.Empty))
+            .ToArray();
+
+        if (gameIds.Length > 0)
+        {
+            var lastGame = await LocalStorageService.GetItemAsync<GameState>($"game-{gameIds.Max()}");
+            if (string.IsNullOrEmpty(lastGame?.WinnerPlayerName))
+                _lastNotFinishedGame = lastGame;
+        }
+    }
+
+    private void NavigateToNewGamePage()
         => NavigationManager.NavigateTo("new-game");
     
-    private async Task LoadStorageAsync()
+    private void NavigateToLastNotFinishedGame()
     {
-        await LocalStorageService.SetItemAsync("name", "John Smith");
-        Name = await LocalStorageService.GetItemAsync<string>("name") ?? "Not found";
-        await InvokeAsync(StateHasChanged);
+        if (_lastNotFinishedGame is null)
+            return;
+        NavigationManager.NavigateTo($"game/{_lastNotFinishedGame.Id}");
     }
 }

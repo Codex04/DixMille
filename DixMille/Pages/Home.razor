@@ -5,8 +5,8 @@
 
     <div id="navigation-buttons">
         <MudPaper Elevation="2" Class="navigation-buttons-content">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow OnClick="@OnNewGameClicked">Nouvelle partie</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow Disabled>Reprendre une partie</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow OnClick="@NavigateToNewGamePage">Nouvelle partie</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow Disabled="@(_lastNotFinishedGame is null)" OnClick="@NavigateToLastNotFinishedGame">Reprendre la dernière partie</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow Disabled>Historique</MudButton>
         </MudPaper>
     </div>
