@@ -7,7 +7,7 @@
 }
 
 <div id="return-to-home-button">
-    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="@NavigateToHome"/>
+    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="@NavigateToHomeAsync"/>
 </div>
 
 <div id="game" class="@(!string.IsNullOrEmpty(_game.WinnerPlayerName) ? "winning-background" : string.Empty)">

@@ -27,6 +27,10 @@ public partial class Game
         NavigationManager.NavigateTo($"game/{GameId}/add-score/{player.Name}");
     }
     
-    private void NavigateToHome()
-        =>  NavigationManager.NavigateTo(""); 
+    private async Task NavigateToHomeAsync()
+    {
+        if (_game is not null)
+            await LocalStorageService.SetItemAsync($"game-{_game.Id}", _game);
+        NavigationManager.NavigateTo("");
+    }
 }

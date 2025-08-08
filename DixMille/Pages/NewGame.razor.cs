@@ -64,6 +64,10 @@ public partial class NewGame
     {
         if (_lastGame is null)
             return;
-        _players = _lastGame.Players.Concat(_players).DistinctBy(player => player.Name).ToList();
+        _players = _lastGame.Players
+            .Select(player => new Player() { Name = player.Name })
+            .Concat(_players)
+            .DistinctBy(player => player.Name)
+            .ToList();
     }
 }
