@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="wwwroot\**" CopyToOutputDirectory="Always" />
+        <Content Include="wwwroot\images\**" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
 </Project>
