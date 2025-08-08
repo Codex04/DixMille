@@ -25,6 +25,11 @@
                                Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" 
                                Disabled="@(!IsNewPlayerNameValid)"/>
             </div>
+            <div id="quick-add-last-players">
+                <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" Disabled="@(_lastGame?.Players.Any() is not true)" OnClick="@AddLastGamePlayers">
+                    Ajouter les joueurs de la dernière partie
+                </MudButton>
+            </div>
         </MudPaper>
     </div>
     

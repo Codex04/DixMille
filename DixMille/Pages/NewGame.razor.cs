@@ -9,6 +9,7 @@ public partial class NewGame
     private readonly List<Player> _players = new();
 
     private Player _newPlayer = new();
+    private GameState? _lastGame;
     
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
@@ -16,6 +17,21 @@ public partial class NewGame
     private bool IsNewPlayerNameValid => !string.IsNullOrWhiteSpace(_newPlayer.Name) && !_players.Any(player => player.Name.Equals(_newPlayer.Name, StringComparison.OrdinalIgnoreCase));
     
     private IEnumerable<Player> ValidPlayers => IsNewPlayerNameValid ? _players.Append(_newPlayer) : _players;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var gameKeys = await LocalStorageService.KeysAsync();
+        var gameIds = gameKeys
+            .Where(key => key.StartsWith("game-"))
+            .Select(key => key.Replace("game-", string.Empty))
+            .ToArray();
+
+        if (gameIds.Length > 0)
+        {
+            var lastGame = await LocalStorageService.GetItemAsync<GameState>($"game-{gameIds.Max()}");
+            _lastGame = lastGame;
+        }
+    }
     
     private void AddNewPlayer()
     {
@@ -42,5 +58,12 @@ public partial class NewGame
     }
     
     private void NavigateToHome()
-        =>  NavigationManager.NavigateTo(""); 
+        =>  NavigationManager.NavigateTo("");
+
+    private void AddLastGamePlayers()
+    {
+        if (_lastGame is null)
+            return;
+        _players.AddRange(_lastGame.Players.Concat(_players).DistinctBy(player => player.Name));
+    }
 }
