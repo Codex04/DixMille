@@ -3,7 +3,7 @@ html, body {
 }
 
 body {
-    background-image: url("../images/background.png");
+    background-image: url("https://github.com/Codex04/DixMille/blob/main/DixMille/wwwroot/Images/background.png?raw=true");
     background-color: rgba(255, 255, 255, 0.1) !important;
     background-blend-mode: overlay;
 }
