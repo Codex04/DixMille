@@ -259,3 +259,9 @@ main[b-2sxllpohzm] {
     width: 80%;
     gap: 10px;
 }
+
+#quick-add-last-players[b-1skptmcujf] {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
