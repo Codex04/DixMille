@@ -26,7 +26,9 @@
                                Disabled="@(!IsNewPlayerNameValid)"/>
             </div>
             <div id="quick-add-last-players">
-                <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" Disabled="@(_lastGame?.Players.Any() is not true)" OnClick="@AddLastGamePlayers">
+                <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" 
+                           Disabled="@(_lastGame is null || _lastGame.Players.All(lastGamePlayer => _players.Any(player => player.Name.Equals(lastGamePlayer.Name, StringComparison.OrdinalIgnoreCase))))" 
+                           OnClick="@AddLastGamePlayers">
                     Ajouter les joueurs de la dernière partie
                 </MudButton>
             </div>

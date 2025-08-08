@@ -6,7 +6,7 @@ namespace DixMille.Pages;
 
 public partial class NewGame
 {
-    private readonly List<Player> _players = new();
+    private List<Player> _players = new();
 
     private Player _newPlayer = new();
     private GameState? _lastGame;
@@ -64,6 +64,6 @@ public partial class NewGame
     {
         if (_lastGame is null)
             return;
-        _players.AddRange(_lastGame.Players.Concat(_players).DistinctBy(player => player.Name));
+        _players = _lastGame.Players.Concat(_players).DistinctBy(player => player.Name).ToList();
     }
 }
