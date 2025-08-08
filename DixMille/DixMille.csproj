@@ -13,4 +13,8 @@
         <PackageReference Include="MudBlazor" Version="8.10.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="wwwroot\**" CopyToOutputDirectory="Always" />
+    </ItemGroup>
+
 </Project>
