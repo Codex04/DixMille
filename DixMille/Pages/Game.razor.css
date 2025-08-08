@@ -21,7 +21,7 @@
 }
 
 .winning-background {
-    background-image: url("/images/firework.gif");
+    background-image: url("https://github.com/Codex04/DixMille/blob/main/DixMille/wwwroot/Images/firework.gif?raw=true");
     background-color: rgba(255, 255, 255, 0.1) !important;
     background-blend-mode: overlay;
 }
