@@ -6,7 +6,7 @@ namespace DixMille.Pages;
 
 public partial class Home
 {
-    private string Name { get; set; } = "Toto";
+    private GameState? _lastGame;
     private GameState? _lastNotFinishedGame;
     
     [Inject] public ILocalStorageService LocalStorageService { get; set; } = null!;
@@ -22,9 +22,9 @@ public partial class Home
 
         if (gameIds.Length > 0)
         {
-            var lastGame = await LocalStorageService.GetItemAsync<GameState>($"game-{gameIds.Max()}");
-            if (string.IsNullOrEmpty(lastGame?.WinnerPlayerName))
-                _lastNotFinishedGame = lastGame;
+            _lastGame = await LocalStorageService.GetItemAsync<GameState>($"game-{gameIds.Max()}");
+            if (string.IsNullOrEmpty(_lastGame?.WinnerPlayerName))
+                _lastNotFinishedGame = _lastGame;
         }
     }
 
@@ -37,4 +37,7 @@ public partial class Home
             return;
         NavigationManager.NavigateTo($"game/{_lastNotFinishedGame.Id}");
     }
+    
+    private void NavigateToHistory()
+        => NavigationManager.NavigateTo("history");
 }

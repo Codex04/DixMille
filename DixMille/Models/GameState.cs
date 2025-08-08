@@ -6,4 +6,5 @@ public class GameState
     public required Player[] Players { get; init; } = [];
     public string LastPlayerName { get; set; } = string.Empty;
     public string WinnerPlayerName { get; set; } = string.Empty;
+    public DateTime CreationDate { get; init; } = DateTime.Now;
 }

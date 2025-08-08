@@ -1,0 +1,22 @@
+@page "/history"
+
+<div id="return-to-home-button">
+    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="@NavigateToHome"/>
+</div>
+
+<div id="history">
+    <MudText Color="Color.Primary" Typo="Typo.h3">Historique des parties</MudText>
+
+    <MudTable Style="width: 100%; height: 100%;" Items="@_games" Breakpoint="Breakpoint.Sm" Loading="@_isLoading" LoadingProgressColor="Color.Info" Context="game">
+        <HeaderContent>
+            <MudTh>Numero</MudTh>
+            <MudTh>Gagnant</MudTh>
+            <MudTh>Date</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Numéro">@game.Id</MudTd>
+            <MudTd DataLabel="Gagnant">@game.WinnerPlayerName</MudTd>
+            <MudTd DataLabel="Date">@game.CreationDate</MudTd>
+        </RowTemplate>
+    </MudTable>
+</div>
