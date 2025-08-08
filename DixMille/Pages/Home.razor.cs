@@ -17,7 +17,7 @@ public partial class Home
         var gameKeys = await LocalStorageService.KeysAsync();
         var gameIds = gameKeys
             .Where(key => key.StartsWith("game-"))
-            .Select(key => key.Replace("game-", string.Empty))
+            .Select(key => int.Parse(key.Replace("game-", string.Empty)))
             .ToArray();
 
         if (gameIds.Length > 0)

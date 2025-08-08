@@ -23,7 +23,7 @@ public partial class NewGame
         var gameKeys = await LocalStorageService.KeysAsync();
         var gameIds = gameKeys
             .Where(key => key.StartsWith("game-"))
-            .Select(key => key.Replace("game-", string.Empty))
+            .Select(key => int.Parse(key.Replace("game-", string.Empty)))
             .ToArray();
 
         if (gameIds.Length > 0)
@@ -41,16 +41,9 @@ public partial class NewGame
     
     private async Task OnStartNewGameClickedAsync()
     {
-        var keys = await LocalStorageService.KeysAsync();
-        var gameIds = keys
-            .Where(key => key.StartsWith("game-"))
-            .Select(key => int.Parse(key.Replace("game-", string.Empty)))
-            .ToArray();
-        var newGameId = gameIds.Any() ? gameIds.Max() + 1 : 1;
-
         var newGame = new GameState()
         {
-            Id = newGameId, 
+            Id = _lastGame?.Id + 1 ?? 1, 
             Players = ValidPlayers.ToArray(),
         };
         await LocalStorageService.SetItemAsync($"game-{newGame.Id}", newGame);

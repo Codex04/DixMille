@@ -37,7 +37,7 @@
     
     <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
                OnClick="@OnStartNewGameClickedAsync"
-               Disabled="@(ValidPlayers.Count() < 2)">
+               Disabled="@(ValidPlayers.Count() < 2 && (IsNewPlayerNameValid || string.IsNullOrEmpty(_newPlayer.Name)))">
         Commencer la partie
     </MudButton>
 </div>
