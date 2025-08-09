@@ -22,7 +22,7 @@ public partial class Game
         => (string.IsNullOrEmpty(_game?.WinnerPlayerName) && player.Score is not 0 && _game?.Players.MaxBy(p => p.Score)?.Score == player.Score)
         || _game?.WinnerPlayerName == player.Name;
 
-    private bool ShouldDisplayCup(Player player)
+    private bool ShouldDisplayPoop(Player player)
         => (player.Score is not 0 && _game?.Players.MaxBy(p => p.Score)?.Score == player.Score)
         || _game?.WinnerPlayerName != player.Name;
     
