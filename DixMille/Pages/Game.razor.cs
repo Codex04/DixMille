@@ -24,7 +24,7 @@ public partial class Game
 
     private bool ShouldDisplayPoop(Player player)
         => player.Score is not 0 
-        && _game?.PlayersMinBy(p => p.Score)?.Score == player.Score
+        && _game?.Players.MinBy(p => p.Score)?.Score == player.Score
         && _game?.WinnerPlayerName != player.Name;
     
     private void OnPlayerClicked(Player player)
