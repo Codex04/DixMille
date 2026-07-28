@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+/*
+ * Dix-Mille — feutre vert & cuivre.
+ *
+ * Tout le décor est en CSS : l'ancienne app chargeait un background.png de
+ * 631 Ko depuis une URL github.com/…/blob/…?raw=true, ce qui la rendait
+ * illisible sans connexion. Ici, dégradé + grain suffisent.
+ */
+
+@theme {
+  --color-felt-950: #06251a;
+  --color-felt-900: #0b3d2e;
+  --color-felt-800: #124f3b;
+  --color-felt-700: #1a6349;
+  --color-felt-600: #237a5a;
+
+  --color-copper-400: #d9a441;
+  --color-copper-500: #b87333;
+  --color-copper-600: #8a551f;
+
+  --color-cream: #f5efe3;
+  --color-cream-dim: #cfc7b8;
+
+  --color-die-red: #8c2f2f;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-card: 1rem;
+
+  --shadow-felt: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-raised: 0 2px 0 var(--color-copper-600), 0 10px 24px rgb(0 0 0 / 0.45);
+}
+
+@layer base {
+  html {
+    /* Empêche le rubber-band de faire apparaître du blanc sous la page. */
+    background-color: var(--color-felt-950);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    background-color: var(--color-felt-900);
+    background-image:
+      radial-gradient(ellipse 120% 80% at 50% -10%, var(--color-felt-700) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 110%, var(--color-felt-950) 0%, transparent 55%);
+    background-attachment: fixed;
+  }
+
+  /* Grain du feutre. Un SVG inline évite toute requête réseau. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  /* Les scores changent en permanence : sans chasse fixe, les chiffres
+     sautent pendant les animations de compteur. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-copper-400);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .surface {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-felt-800) 92%, white) 0%,
+      var(--color-felt-800) 100%
+    );
+    border: 1px solid color-mix(in oklab, var(--color-copper-500) 35%, transparent);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-felt);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    /* 44 px minimum : cible tactile confortable. */
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      transform 120ms ease,
+      filter 120ms ease;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(2px);
+    filter: brightness(0.95);
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: linear-gradient(180deg, var(--color-copper-400), var(--color-copper-500));
+    color: var(--color-felt-950);
+    box-shadow: var(--shadow-raised);
+  }
+
+  .btn-ghost {
+    background: color-mix(in oklab, var(--color-felt-700) 70%, transparent);
+    border-color: color-mix(in oklab, var(--color-copper-500) 40%, transparent);
+    color: var(--color-cream);
+  }
+
+  .title {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

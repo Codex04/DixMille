@@ -1,0 +1,15 @@
+{
+  "_comment": "Contenu localStorage écrit par l'app Blazor. game-1 est la capture exacte réalisée sur https://codex04.github.io/DixMille/ : PascalCase, JSON brut, date avec offset local. Les autres entrées reproduisent le même format pour couvrir les cas restants.",
+
+  "game-1": "{\"Id\":1,\"Players\":[{\"Name\":\"Alice\",\"Score\":0},{\"Name\":\"Bob\",\"Score\":0}],\"LastPlayerName\":\"\",\"WinnerPlayerName\":\"\",\"CreationDate\":\"2026-07-28T21:22:57.166+02:00\"}",
+
+  "game-2": "{\"Id\":2,\"Players\":[{\"Name\":\"Sacha\",\"Score\":10250},{\"Name\":\"Julie\",\"Score\":8400},{\"Name\":\"Clem\",\"Score\":7150},{\"Name\":\"Quentin\",\"Score\":9800}],\"LastPlayerName\":\"Sacha\",\"WinnerPlayerName\":\"Sacha\",\"CreationDate\":\"2025-08-02T20:14:03.881+02:00\"}",
+
+  "game-3": "{\"Id\":3,\"Players\":[{\"Name\":\"Quentin\",\"Score\":3200},{\"Name\":\"Clem\",\"Score\":-450},{\"Name\":\"Julie\",\"Score\":0}],\"LastPlayerName\":\"Clem\",\"WinnerPlayerName\":\"\",\"CreationDate\":\"2025-08-08T19:02:11.004+02:00\"}",
+
+  "game-4": "{\"Id\":4,\"Players\":[{\"Name\":\"Solo\"",
+
+  "game-5": "{\"id\":5,\"players\":[{\"name\":\"camel\",\"score\":600}],\"lastPlayerName\":\"\",\"winnerPlayerName\":\"\",\"creationDate\":\"2025-09-01T10:00:00.000+02:00\"}",
+
+  "unrelated-key": "valeur d'une autre application sur la même origine"
+}

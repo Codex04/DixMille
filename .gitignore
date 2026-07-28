@@ -348,3 +348,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# ---- Dix-Mille v2 (Vite / React) ----
+dist/
+dist-ssr/
+.vite/
+coverage/
+*.local
+dev-dist/
+.DS_Store
+npm-debug.log*
+yarn-error.log*

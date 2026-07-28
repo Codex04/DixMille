@@ -3,7 +3,11 @@ name: gh-pages
 permissions:
   contents: write
 
-on: [push]
+# Ancienne app Blazor. Le déclenchement automatique est retiré : ce
+# workflow publiait en production à chaque push sur n'importe quelle
+# branche. Il reste disponible manuellement, comme chemin de retour arrière
+# tant que la version React n'est pas validée.
+on: workflow_dispatch
 
 jobs:
   build:
