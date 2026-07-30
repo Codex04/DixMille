@@ -40,6 +40,12 @@ interface GameStore {
   applyImport: (incoming: PersistedState) => { games: number; presets: number }
   /** Ajoute des jeux reçus par lien. Renvoie le nombre réellement ajouté. */
   importPresets: (incoming: Preset[]) => number
+
+  /**
+   * Efface toutes les parties. Les jeux et les réglages sont conservés.
+   * Renvoie le nombre de parties supprimées.
+   */
+  clearGames: () => number
 }
 
 export const useGameStore = create<GameStore>((set, get) => {
@@ -211,6 +217,18 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       commitSettings({ ...settings, presets: [...settings.presets, ...added] })
       return added.length
+    },
+
+    clearGames() {
+      const { games, settings } = get()
+      if (games.length === 0) return 0
+
+      set({ games: [] })
+      persist([], settings)
+      // Les clés `game-*` de l'ancienne app restent en place, mais le drapeau
+      // de migration aussi : les parties importées ne réapparaîtront pas au
+      // prochain démarrage. Effacer efface pour de bon.
+      return games.length
     },
 
     applyImport(incoming) {

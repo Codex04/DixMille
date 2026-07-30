@@ -18,8 +18,11 @@ export default function Settings() {
   const removePreset = useGameStore((state) => state.removePreset)
   const applyImport = useGameStore((state) => state.applyImport)
 
+  const clearGames = useGameStore((state) => state.clearGames)
+
   const fileInput = useRef<HTMLInputElement>(null)
   const [feedback, setFeedback] = useState<string | null>(null)
+  const [confirmClear, setConfirmClear] = useState(false)
 
   /**
    * Partage des jeux par lien : quelques centaines d'octets tiennent dans
@@ -166,6 +169,65 @@ export default function Settings() {
           }}
         />
         {feedback && <p className="text-sm text-copper-400">{feedback}</p>}
+      </section>
+
+      <section className="mb-4 mt-8 flex flex-col gap-2">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-cream-dim">
+          Zone de danger
+        </h2>
+
+        {!confirmClear ? (
+          <>
+            <p className="text-sm text-cream-dim">
+              Efface toutes les parties. Les jeux et leurs réglages sont conservés.
+              Pense à sauvegarder avant.
+            </p>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              disabled={games.length === 0}
+              onClick={() => setConfirmClear(true)}
+            >
+              {games.length === 0
+                ? 'Aucune partie à effacer'
+                : `Effacer l’historique (${games.length})`}
+            </button>
+          </>
+        ) : (
+          <div className="surface border-die-red p-4">
+            <p className="mb-1 font-semibold">
+              Effacer {games.length} partie{games.length > 1 ? 's' : ''} ?
+            </p>
+            {/* Annoncer précisément ce qui disparaît et ce qui reste : c'est
+                ce qui distingue une confirmation utile d'un réflexe. */}
+            <p className="mb-4 text-sm text-cream-dim">
+              L’historique et le palmarès seront vidés définitivement. Tes jeux sont conservés.
+              Cette action est irréversible — seule une sauvegarde permet de revenir en arrière.
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="btn btn-ghost flex-1"
+                onClick={() => setConfirmClear(false)}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger flex-1"
+                onClick={() => {
+                  const removed = clearGames()
+                  setConfirmClear(false)
+                  setFeedback(
+                    `${removed} partie${removed > 1 ? 's' : ''} effacée${removed > 1 ? 's' : ''}.`,
+                  )
+                }}
+              >
+                Effacer
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </Screen>
   )

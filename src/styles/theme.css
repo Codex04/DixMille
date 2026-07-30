@@ -143,6 +143,14 @@
     box-shadow: var(--shadow-raised);
   }
 
+  /* Réservé aux actions irréversibles : le rouge doit rester rare pour
+     garder son sens d'avertissement. */
+  .btn-danger {
+    background: var(--color-die-red);
+    color: var(--color-cream);
+    border-color: color-mix(in oklab, var(--color-die-red) 60%, black);
+  }
+
   .btn-ghost {
     background: color-mix(in oklab, var(--color-felt-700) 70%, transparent);
     border-color: color-mix(in oklab, var(--color-copper-500) 40%, transparent);
