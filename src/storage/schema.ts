@@ -1,51 +1,27 @@
 import * as v from 'valibot'
-import { DEFAULT_RULES, type ToggleableCombo } from '../domain/rules'
+import { DIX_MILLE_PRESET, normalizeAmounts, type Preset } from '../domain/preset'
 import type { Game, PersistedState, Settings } from '../domain/types'
 
 /**
  * Validation défensive de l'état persisté.
  *
  * Principe : une donnée abîmée ne doit jamais faire perdre plus que
- * nécessaire. Les champs de réglages retombent individuellement sur leur
- * défaut, et une partie illisible est écartée seule, sans emporter les
- * autres.
+ * nécessaire. Les champs retombent individuellement sur leur défaut, et une
+ * partie illisible est écartée seule, sans emporter les autres.
  */
 
-function toggleable(fallback: ToggleableCombo) {
-  return v.fallback(
-    v.object({
-      enabled: v.fallback(v.boolean(), fallback.enabled),
-      points: v.fallback(v.number(), fallback.points),
-    }),
-    fallback,
-  )
-}
-
-export const ruleSetSchema = v.object({
-  target: v.fallback(v.number(), DEFAULT_RULES.target),
-  minimumTurnScore: v.fallback(v.number(), DEFAULT_RULES.minimumTurnScore),
-  scoreStep: v.fallback(v.number(), DEFAULT_RULES.scoreStep),
-  single1: v.fallback(v.number(), DEFAULT_RULES.single1),
-  single5: v.fallback(v.number(), DEFAULT_RULES.single5),
-  tripleOf1: v.fallback(v.number(), DEFAULT_RULES.tripleOf1),
-  tripleMultiplier: v.fallback(v.number(), DEFAULT_RULES.tripleMultiplier),
-  quadFactor: v.fallback(v.number(), DEFAULT_RULES.quadFactor),
-  quintMultiplier: v.fallback(v.number(), DEFAULT_RULES.quintMultiplier),
-  quintOf1: v.fallback(v.number(), DEFAULT_RULES.quintOf1),
-  sextetWins: v.fallback(v.boolean(), DEFAULT_RULES.sextetWins),
-  straight: toggleable(DEFAULT_RULES.straight),
-  threePairs: toggleable(DEFAULT_RULES.threePairs),
+export const presetSchema = v.object({
+  id: v.pipe(v.string(), v.minLength(1)),
+  name: v.fallback(v.string(), DIX_MILLE_PRESET.name),
+  target: v.fallback(v.number(), DIX_MILLE_PRESET.target),
+  amounts: v.fallback(v.array(v.number()), DIX_MILLE_PRESET.amounts),
+  minimumTurnScore: v.fallback(v.number(), 0),
+  scoreStep: v.fallback(v.number(), 1),
 })
 
 export const playerSchema = v.object({
   id: v.pipe(v.string(), v.minLength(1)),
   name: v.string(),
-})
-
-export const comboEntrySchema = v.object({
-  comboId: v.string(),
-  count: v.number(),
-  points: v.number(),
 })
 
 export const turnSchema = v.object({
@@ -54,7 +30,6 @@ export const turnSchema = v.object({
   points: v.pipe(v.number(), v.integer()),
   at: v.string(),
   imported: v.optional(v.boolean()),
-  breakdown: v.optional(v.array(comboEntrySchema)),
 })
 
 export const gameSchema = v.object({
@@ -66,16 +41,21 @@ export const gameSchema = v.object({
   createdAt: v.string(),
   finishedAt: v.optional(v.string()),
   winnerPlayerId: v.optional(v.string()),
-  rules: v.fallback(ruleSetSchema, DEFAULT_RULES),
+  preset: v.fallback(presetSchema, DIX_MILLE_PRESET),
 })
 
 export const settingsSchema = v.object({
-  rules: v.fallback(ruleSetSchema, DEFAULT_RULES),
+  presets: v.fallback(v.pipe(v.array(presetSchema), v.minLength(1)), [DIX_MILLE_PRESET]),
+  activePresetId: v.fallback(v.string(), DIX_MILLE_PRESET.id),
   theme: v.fallback(v.picklist(['dark', 'light']), 'dark'),
 })
 
 export function defaultSettings(): Settings {
-  return { rules: { ...DEFAULT_RULES }, theme: 'dark' }
+  return {
+    presets: [{ ...DIX_MILLE_PRESET }],
+    activePresetId: DIX_MILLE_PRESET.id,
+    theme: 'dark',
+  }
 }
 
 export function defaultState(): PersistedState {
@@ -90,6 +70,18 @@ export interface ParseStateResult {
   unreadable: boolean
 }
 
+/** Remet d'aplomb un preset relu du stockage. */
+function sanitizePreset(preset: Preset): Preset {
+  const amounts = normalizeAmounts(preset.amounts)
+  return {
+    ...preset,
+    // Un preset sans montant rendrait l'onglet Rapide inutilisable.
+    amounts: amounts.length > 0 ? amounts : DIX_MILLE_PRESET.amounts,
+    scoreStep: preset.scoreStep > 0 ? preset.scoreStep : 1,
+    minimumTurnScore: Math.max(0, preset.minimumTurnScore),
+  }
+}
+
 /**
  * Reconstruit un état à partir d'une valeur quelconque.
  * Ne lève jamais : au pire, renvoie l'état par défaut.
@@ -102,7 +94,17 @@ export function parseState(input: unknown): ParseStateResult {
   const source = input as Record<string, unknown>
 
   const settingsResult = v.safeParse(settingsSchema, source.settings)
-  const settings = settingsResult.success ? settingsResult.output : defaultSettings()
+  const settings: Settings = settingsResult.success
+    ? {
+        ...(settingsResult.output as Settings),
+        presets: (settingsResult.output as Settings).presets.map(sanitizePreset),
+      }
+    : defaultSettings()
+
+  // Le preset actif doit exister, sinon la création de partie échouerait.
+  if (!settings.presets.some((preset) => preset.id === settings.activePresetId)) {
+    settings.activePresetId = settings.presets[0]?.id ?? DIX_MILLE_PRESET.id
+  }
 
   // Chaque partie est validée séparément : une seule partie corrompue ne
   // doit pas emporter tout l'historique.
@@ -113,14 +115,15 @@ export function parseState(input: unknown): ParseStateResult {
   for (const rawGame of rawGames) {
     const result = v.safeParse(gameSchema, rawGame)
     if (result.success) {
-      games.push(result.output as Game)
+      const game = result.output as Game
+      games.push({ ...game, preset: sanitizePreset(game.preset) })
     } else {
       dropped += 1
     }
   }
 
   return {
-    state: { version: 2, games, settings: settings as Settings },
+    state: { version: 2, games, settings },
     dropped,
     unreadable: false,
   }

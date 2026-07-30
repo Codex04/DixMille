@@ -13,7 +13,7 @@ export default function ScoreChart({ game }: { game: Game }) {
 
   const longest = Math.max(...series.map((entry) => entry.points.length), 2)
   const values = series.flatMap((entry) => entry.points)
-  const max = Math.max(game.rules.target, ...values)
+  const max = Math.max(game.preset.target, ...values)
   const min = Math.min(0, ...values)
   const span = max - min || 1
 
@@ -42,9 +42,9 @@ export default function ScoreChart({ game }: { game: Game }) {
         {/* Ligne d'objectif */}
         <line
           x1={padding}
-          y1={y(game.rules.target)}
+          y1={y(game.preset.target)}
           x2={width - padding}
-          y2={y(game.rules.target)}
+          y2={y(game.preset.target)}
           stroke="var(--color-copper-600)"
           strokeWidth="1"
           strokeDasharray="4 4"

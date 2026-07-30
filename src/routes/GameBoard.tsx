@@ -27,7 +27,7 @@ export default function GameBoard() {
 
   return (
     <Screen
-      title="Dix-Mille"
+      title={game.preset.name}
       back="/"
       action={
         <button
@@ -44,7 +44,7 @@ export default function GameBoard() {
         <div className="surface mb-4 border-copper-400 p-4 text-center">
           <p className="title text-2xl font-bold text-copper-400">{winner.name} l’emporte !</p>
           <p className="mt-1 text-sm text-cream-dim">
-            Objectif de {game.rules.target.toLocaleString('fr-FR')} points atteint.
+            Objectif de {game.preset.target.toLocaleString('fr-FR')} points atteint.
           </p>
         </div>
       ) : (
@@ -89,9 +89,12 @@ export default function GameBoard() {
         </p>
       )}
 
-      <p className="mt-auto pt-6 text-center text-xs text-cream-dim">
-        Minimum {game.rules.minimumTurnScore} points par tour pour marquer.
-      </p>
+      {/* Un minimum à 0 signifie « pas de contrainte » : inutile de l'afficher. */}
+      {game.preset.minimumTurnScore > 0 && (
+        <p className="mt-auto pt-6 text-center text-xs text-cream-dim">
+          Minimum {game.preset.minimumTurnScore} points par tour pour marquer.
+        </p>
+      )}
     </Screen>
   )
 }

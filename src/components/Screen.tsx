@@ -6,19 +6,27 @@ interface ScreenProps {
   /** Destination du bouton retour. Absent : pas de bouton. */
   back?: string
   action?: ReactNode
+  /**
+   * Barre d'action épinglée en bas, hors de la zone défilante. Ce qu'on y
+   * met reste atteignable même si le contenu déborde.
+   */
+  footer?: ReactNode
   children: ReactNode
 }
 
 /**
- * Gabarit commun : colonne centrée, largeur limitée pour rester lisible
- * aussi bien sur téléphone que sur un écran large.
+ * Gabarit commun : en-tête et pied fixes, contenu défilant entre les deux.
+ *
+ * La hauteur est bornée au plus petit viewport (`.app-shell`), donc en
+ * pratique rien ne défile ; le débordement n'est qu'un filet de sécurité
+ * pour les petits écrans ou les grandes tailles de police système.
  */
-export default function Screen({ title, back, action, children }: ScreenProps) {
+export default function Screen({ title, back, action, footer, children }: ScreenProps) {
   const navigate = useNavigate()
 
   return (
-    <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-lg flex-col px-4 pb-8">
-      <header className="flex items-center gap-3 py-4">
+    <div className="app-shell relative z-10 mx-auto flex w-full max-w-lg flex-col">
+      <header className="flex shrink-0 items-center gap-3 px-4 py-3">
         {back !== undefined && (
           <button
             type="button"
@@ -37,10 +45,15 @@ export default function Screen({ title, back, action, children }: ScreenProps) {
             </svg>
           </button>
         )}
-        {title && <h1 className="title flex-1 text-2xl font-semibold">{title}</h1>}
+        {title && <h1 className="title flex-1 truncate text-2xl font-semibold">{title}</h1>}
         {action}
       </header>
-      <main className="flex flex-1 flex-col">{children}</main>
+
+      {/* `min-h-0` est indispensable : sans lui un enfant flex refuse de
+          rétrécir sous sa taille de contenu et déborde la coquille. */}
+      <main className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-2">{children}</main>
+
+      {footer && <div className="shrink-0 px-4 pb-3 pt-2">{footer}</div>}
     </div>
   )
 }

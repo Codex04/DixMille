@@ -77,7 +77,7 @@ export function detectWinner(game: Game): PlayerId | undefined {
   for (const turn of game.turns) {
     const next = (totals.get(turn.playerId) ?? 0) + turn.points
     totals.set(turn.playerId, next)
-    if (next >= game.rules.target) return turn.playerId
+    if (next >= game.preset.target) return turn.playerId
   }
   return undefined
 }

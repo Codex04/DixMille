@@ -114,18 +114,40 @@ export function importState(json: string): ImportResult {
   return { ok: true, state: result.state, dropped: result.dropped }
 }
 
-/** Fusionne un import dans l'état courant sans écraser les parties existantes. */
+/**
+ * Fusionne un import dans l'état courant, en ajout seulement.
+ *
+ * Parties **et** jeux sont repris : sans les presets, importer une sauvegarde
+ * sur un autre appareil donnerait un historique consultable mais aucun moyen
+ * de relancer une partie avec les mêmes réglages.
+ *
+ * Rien n'est jamais écrasé. Un preset déjà présent sous le même identifiant
+ * est conservé tel quel : en cas d'édition divergente entre deux appareils,
+ * la version locale gagne.
+ */
 export function mergeState(current: PersistedState, incoming: PersistedState): PersistedState {
   const knownIds = new Set(current.games.map((game) => game.id))
   const knownLegacyIds = new Set(
     current.games.map((game) => game.legacyId).filter((id): id is number => id !== undefined),
   )
 
-  const added = incoming.games.filter((game) => {
+  const addedGames = incoming.games.filter((game) => {
     if (knownIds.has(game.id)) return false
     if (game.legacyId !== undefined && knownLegacyIds.has(game.legacyId)) return false
     return true
   })
 
-  return { ...current, games: [...current.games, ...added] }
+  const knownPresetIds = new Set(current.settings.presets.map((preset) => preset.id))
+  const addedPresets = incoming.settings.presets.filter(
+    (preset) => !knownPresetIds.has(preset.id),
+  )
+
+  return {
+    ...current,
+    games: [...current.games, ...addedGames],
+    settings: {
+      ...current.settings,
+      presets: [...current.settings.presets, ...addedPresets],
+    },
+  }
 }

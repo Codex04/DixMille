@@ -21,7 +21,13 @@ export default function GameDetail() {
   const imported = game.turns.some((turn) => turn.imported)
 
   return (
-    <Screen title={new Date(game.createdAt).toLocaleDateString('fr-FR')} back="/historique">
+    <Screen
+      title={new Date(game.createdAt).toLocaleString('fr-FR', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      })}
+      back="/historique"
+    >
       <ul className="mb-4 flex flex-col gap-2">
         {rows.map((row) => (
           <li key={row.player.id} className="surface flex items-center gap-3 px-4 py-2">

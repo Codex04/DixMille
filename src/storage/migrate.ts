@@ -1,4 +1,4 @@
-import { DEFAULT_RULES, type RuleSet } from '../domain/rules'
+import { DIX_MILLE_PRESET, type Preset } from '../domain/preset'
 import type { Game, PersistedState, Player, Turn } from '../domain/types'
 import { createId } from '../lib/id'
 import { KEY_LEGACY_BACKUP, KEY_MIGRATED_AT, KEY_MIGRATION_REPORT } from './keys'
@@ -45,7 +45,7 @@ function toIso(value: string, fallback: Date): string {
  */
 export function convertLegacyGame(
   legacy: LegacyGame,
-  rules: RuleSet,
+  preset: Preset,
   deps: MigrationDeps = defaultDeps,
 ): Game {
   const createdAt = toIso(legacy.creationDate, deps.now())
@@ -90,7 +90,7 @@ export function convertLegacyGame(
     turns,
     currentPlayerIndex,
     createdAt,
-    rules,
+    preset,
   }
 
   if (winner) {
@@ -149,11 +149,16 @@ export function runMigrationIfNeeded(
       state.games.map((game) => game.legacyId).filter((id): id is number => id !== undefined),
     )
 
-    const rules = state.settings.rules ?? DEFAULT_RULES
+    // Les parties importées sont par construction des parties de Dix-Mille :
+    // on leur attribue ce preset, pas le premier venu de la liste.
+    const preset =
+      state.settings.presets.find((entry) => entry.id === DIX_MILLE_PRESET.id) ??
+      state.settings.presets[0] ??
+      DIX_MILLE_PRESET
     const imported: Game[] = []
     for (const legacy of legacyGames) {
       if (alreadyImported.has(legacy.id)) continue
-      imported.push(convertLegacyGame(legacy, rules, deps))
+      imported.push(convertLegacyGame(legacy, preset, deps))
     }
 
     const report: MigrationReport = {

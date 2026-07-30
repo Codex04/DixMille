@@ -9,8 +9,11 @@ export default function NewGame() {
   const games = useGameStore((state) => state.games)
   const createGame = useGameStore((state) => state.createGame)
 
+  const settings = useGameStore((state) => state.settings)
+
   const [names, setNames] = useState<string[]>([])
   const [draft, setDraft] = useState('')
+  const [presetId, setPresetId] = useState(settings.activePresetId)
 
   const previous = games.length > 0 ? games[games.length - 1] : undefined
   const canAdd = isPlayerNameAvailable(draft, names)
@@ -42,12 +45,47 @@ export default function NewGame() {
 
   function start() {
     if (!canStart) return
-    const game = createGame(names)
+    const game = createGame(names, presetId)
     navigate(`/partie/${game.id}`)
   }
 
   return (
-    <Screen title="Nouvelle partie" back="/">
+    <Screen
+      title="Nouvelle partie"
+      back="/"
+      footer={
+        <button
+          type="button"
+          className="btn btn-primary w-full text-lg"
+          disabled={!canStart}
+          onClick={start}
+        >
+          {canStart ? 'Commencer la partie' : 'Il faut au moins 2 joueurs'}
+        </button>
+      }
+    >
+      {/* Le sélecteur de jeu ne sert à rien s'il n'y en a qu'un. */}
+      {settings.presets.length > 1 && (
+        <div className="mb-4">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-cream-dim">
+            Jeu
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {settings.presets.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                aria-pressed={preset.id === presetId}
+                className={`btn ${preset.id === presetId ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setPresetId(preset.id)}
+              >
+                {preset.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <p className="mb-4 text-sm text-cream-dim">
         L’ordre de la liste est l’ordre de jeu.
       </p>
@@ -116,16 +154,6 @@ export default function NewGame() {
         </button>
       )}
 
-      <div className="mt-auto pt-4">
-        <button
-          type="button"
-          className="btn btn-primary w-full text-lg"
-          disabled={!canStart}
-          onClick={start}
-        >
-          {canStart ? 'Commencer la partie' : 'Il faut au moins 2 joueurs'}
-        </button>
-      </div>
     </Screen>
   )
 }

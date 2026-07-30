@@ -69,8 +69,11 @@ export default function History() {
                       <p className="tabular font-semibold text-copper-400">
                         {best.toLocaleString('fr-FR')}
                       </p>
-                      <p className="text-xs text-cream-dim">
-                        {new Date(game.createdAt).toLocaleDateString('fr-FR')}
+                      <p className="whitespace-nowrap text-xs text-cream-dim">
+                        {new Date(game.createdAt).toLocaleString('fr-FR', {
+                          dateStyle: 'short',
+                          timeStyle: 'short',
+                        })}
                       </p>
                     </div>
                   </button>

@@ -5,8 +5,9 @@ import GameBoard from './routes/GameBoard'
 import GameDetail from './routes/GameDetail'
 import History from './routes/History'
 import Home from './routes/Home'
+import ImportLink from './routes/ImportLink'
 import NewGame from './routes/NewGame'
-import Rules from './routes/Rules'
+import Settings from './routes/Settings'
 import { useGameStore } from './store/useGameStore'
 
 export default function App() {
@@ -30,7 +31,8 @@ export default function App() {
         <Route path="/partie/:gameId/score/:playerId" element={<AddScore />} />
         <Route path="/historique" element={<History />} />
         <Route path="/historique/:gameId" element={<GameDetail />} />
-        <Route path="/regles" element={<Rules />} />
+        <Route path="/reglages" element={<Settings />} />
+        <Route path="/importer" element={<ImportLink />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

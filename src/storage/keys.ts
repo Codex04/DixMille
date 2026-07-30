@@ -4,6 +4,11 @@
  * GitHub Pages les conserve, même en renommant le dépôt. Basculer vers un
  * domaine personnalisé, Netlify ou Vercel les détruirait toutes, sans
  * avertissement. Voir README avant tout changement d'hébergement.
+ *
+ * ⚠️ Le préfixe `dixmille:` ci-dessous est de la **donnée**, pas de la
+ * marque. L'app s'appelle désormais Ardoise, mais renommer ces clés
+ * rendrait invisible l'historique de tous les utilisateurs existants. Il
+ * reste donc tel quel, sciemment.
  */
 
 /** Clés écrites par l'app Blazor : `game-1`, `game-2`, … */

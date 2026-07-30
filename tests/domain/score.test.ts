@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_RULES } from '../../src/domain/rules'
+import { DIX_MILLE_PRESET } from '../../src/domain/preset'
 import { currentPlayer, detectWinner, progression, scoreOf, standings } from '../../src/domain/score'
 import type { Game, Turn } from '../../src/domain/types'
 
@@ -19,7 +19,7 @@ function gameWith(turns: Array<[playerId: string, points: number]>): Game {
     })),
     currentPlayerIndex: 0,
     createdAt: '2026-01-01T00:00:00.000Z',
-    rules: DEFAULT_RULES,
+    preset: DIX_MILLE_PRESET,
   }
 }
 

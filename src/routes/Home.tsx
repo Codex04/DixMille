@@ -20,7 +20,7 @@ export default function Home() {
               <Die key={face} face={face} />
             ))}
           </div>
-          <h1 className="title text-5xl font-bold text-copper-400">Dix-Mille</h1>
+          <h1 className="title text-5xl font-bold text-copper-400">Ardoise</h1>
           <p className="mt-2 text-cream-dim">Le compteur de points</p>
         </div>
 
@@ -53,8 +53,8 @@ export default function Home() {
             Historique{finishedCount > 0 ? ` (${finishedCount})` : ''}
           </button>
 
-          <button type="button" className="btn btn-ghost" onClick={() => navigate('/regles')}>
-            Règles et réglages
+          <button type="button" className="btn btn-ghost" onClick={() => navigate('/reglages')}>
+            Réglages
           </button>
         </div>
 

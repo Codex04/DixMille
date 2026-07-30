@@ -1,9 +1,9 @@
 {
-  "name": "dixmille",
+  "name": "ardoise",
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "Compteur de points pour le jeu du Dix-Mille",
+  "description": "Compteur de points pour vos jeux de societe",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/spa-fallback.mjs",

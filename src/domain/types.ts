@@ -1,4 +1,4 @@
-import type { RuleSet } from './rules'
+import type { Preset } from './preset'
 
 export type PlayerId = string
 export type GameId = string
@@ -8,23 +8,15 @@ export interface Player {
   name: string
 }
 
-/** Détail d'un tour saisi via le sélecteur de combinaisons. */
-export interface ComboEntry {
-  comboId: string
-  count: number
-  points: number
-}
-
 export interface Turn {
   id: string
   playerId: PlayerId
-  /** Négatif autorisé : relance ratée après un hot dice. */
+  /** Négatif autorisé : au Dix-Mille, une relance ratée fait perdre des points. */
   points: number
   /** ISO 8601. */
   at: string
   /** Tour de report créé par la migration depuis l'ancienne app. */
   imported?: boolean
-  breakdown?: ComboEntry[]
 }
 
 export interface Game {
@@ -43,13 +35,17 @@ export interface Game {
   createdAt: string
   finishedAt?: string
   winnerPlayerId?: PlayerId
-  /** Variante figée à la création de la partie. */
-  rules: RuleSet
+  /**
+   * Copie du preset au moment de la création. Modifier un preset dans les
+   * réglages ne réécrit donc jamais une partie déjà jouée.
+   */
+  preset: Preset
 }
 
 export interface Settings {
-  /** Variante appliquée aux nouvelles parties. */
-  rules: RuleSet
+  presets: Preset[]
+  /** Preset proposé par défaut à la création d'une partie. */
+  activePresetId: string
   theme: 'dark' | 'light'
 }
 

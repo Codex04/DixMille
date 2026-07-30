@@ -42,7 +42,10 @@
 
   body {
     margin: 0;
-    min-height: 100dvh;
+    /* `svh` et non `dvh` : c'est la hauteur barre d'URL déployée, donc la
+       plus petite. Ce qui tient en `svh` tient dans tous les états, alors
+       que `dvh` déborde dès que Safari refait apparaître sa barre. */
+    min-height: 100svh;
     color: var(--color-cream);
     font-family: var(--font-sans);
     background-color: var(--color-felt-900);
@@ -78,6 +81,23 @@
 }
 
 @layer components {
+  /*
+   * Coquille d'écran : hauteur fixée au plus petit viewport, et zones
+   * sûres réservées.
+   *
+   * `viewport-fit=cover` (index.html) fait passer la page sous l'encoche et
+   * sous l'indicateur d'accueil pour que le feutre aille jusqu'aux bords —
+   * il faut donc compenser explicitement, sinon les boutons du bas passent
+   * dessous et deviennent inatteignables.
+   */
+  .app-shell {
+    height: 100svh;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
   .surface {
     background: linear-gradient(
       180deg,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_RULES } from '../../src/domain/rules'
+import { DIX_MILLE_PRESET } from '../../src/domain/preset'
 import { scoreOf, scoresOf } from '../../src/domain/score'
 import { KEY_LEGACY_BACKUP, KEY_MIGRATED_AT } from '../../src/storage/keys'
 import { readLegacyGames } from '../../src/storage/legacy'
@@ -47,7 +47,7 @@ describe('conversion d’une partie', () => {
   it('reconstitue exactement les scores d’origine', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     const legacy = games.find((game) => game.id === 2)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     const totals = scoresOf(converted)
     const byName = new Map(converted.players.map((player) => [player.name, totals.get(player.id)]))
@@ -61,7 +61,7 @@ describe('conversion d’une partie', () => {
   it('conserve les scores négatifs issus d’une relance ratée', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     const legacy = games.find((game) => game.id === 3)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     const clem = converted.players.find((player) => player.name === 'Clem')!
     expect(scoreOf(converted, clem.id)).toBe(-450)
@@ -70,7 +70,7 @@ describe('conversion d’une partie', () => {
   it('préserve le gagnant et marque la partie terminée', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     const legacy = games.find((game) => game.id === 2)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     const sacha = converted.players.find((player) => player.name === 'Sacha')!
     expect(converted.winnerPlayerId).toBe(sacha.id)
@@ -80,7 +80,7 @@ describe('conversion d’une partie', () => {
   it('ne crée pas de tour pour un joueur à zéro', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     const legacy = games.find((game) => game.id === 1)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     expect(converted.turns).toHaveLength(0)
     expect(converted.players).toHaveLength(2)
@@ -90,7 +90,7 @@ describe('conversion d’une partie', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     // game-3 : joueurs [Quentin, Clem, Julie], dernier joueur = Clem (index 1).
     const legacy = games.find((game) => game.id === 3)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     expect(converted.currentPlayerIndex).toBe(2)
     expect(converted.players[converted.currentPlayerIndex]?.name).toBe('Julie')
@@ -99,7 +99,7 @@ describe('conversion d’une partie', () => {
   it('conserve legacyId et une date de création valide', () => {
     const { games } = readLegacyGames(storageWithLegacyData())
     const legacy = games.find((game) => game.id === 2)!
-    const converted = convertLegacyGame(legacy, DEFAULT_RULES, deterministicDeps())
+    const converted = convertLegacyGame(legacy, DIX_MILLE_PRESET, deterministicDeps())
 
     expect(converted.legacyId).toBe(2)
     expect(Number.isNaN(new Date(converted.createdAt).getTime())).toBe(false)

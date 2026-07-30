@@ -1,4 +1,4 @@
-import type { RuleSet } from './rules'
+import type { Preset } from './preset'
 
 export type TurnStatus =
   /** Enregistrable tel quel. */
@@ -7,7 +7,7 @@ export type TurnStatus =
   | 'below-minimum'
   /** Tour raté assumé, enregistré à 0. */
   | 'zero'
-  /** Relance ratée après un hot dice : le joueur perd des points. */
+  /** Le joueur perd des points. */
   | 'negative'
   /** Pas un multiple du pas de score. */
   | 'invalid-step'
@@ -21,13 +21,14 @@ export interface TurnValidation {
 }
 
 /**
- * Le minimum de 400 s'applique à *chaque* tour, pas seulement à l'entrée en
- * jeu : un total compris entre 1 et 399 ne rapporte rien.
+ * Un preset peut imposer un minimum par tour — au Dix-Mille, il faut 400
+ * points pour marquer quoi que ce soit, et cela s'applique à *chaque* tour,
+ * pas seulement à l'entrée en jeu.
  *
- * Le résultat reste soumettable dans ce cas, mais à 0 point — mieux vaut
+ * Le résultat reste soumettable dans ce cas, mais à 0 point : mieux vaut
  * l'annoncer explicitement que de griser un bouton sans explication.
  */
-export function validateTurn(points: number, rules: RuleSet): TurnValidation {
+export function validateTurn(points: number, preset: Preset): TurnValidation {
   if (!Number.isInteger(points)) {
     return {
       status: 'invalid-step',
@@ -37,12 +38,13 @@ export function validateTurn(points: number, rules: RuleSet): TurnValidation {
     }
   }
 
-  if (points % rules.scoreStep !== 0) {
+  const step = preset.scoreStep > 0 ? preset.scoreStep : 1
+  if (points % step !== 0) {
     return {
       status: 'invalid-step',
       effectivePoints: 0,
       canSubmit: false,
-      message: `Le score doit être un multiple de ${rules.scoreStep}`,
+      message: `Le score doit être un multiple de ${step}`,
     }
   }
 
@@ -51,7 +53,7 @@ export function validateTurn(points: number, rules: RuleSet): TurnValidation {
       status: 'negative',
       effectivePoints: points,
       canSubmit: true,
-      message: `Relance ratée : ${points} points`,
+      message: `${points} points`,
     }
   }
 
@@ -64,12 +66,12 @@ export function validateTurn(points: number, rules: RuleSet): TurnValidation {
     }
   }
 
-  if (points < rules.minimumTurnScore) {
+  if (points < preset.minimumTurnScore) {
     return {
       status: 'below-minimum',
       effectivePoints: 0,
       canSubmit: true,
-      message: `Moins de ${rules.minimumTurnScore} points : le tour ne rapporte rien`,
+      message: `Moins de ${preset.minimumTurnScore} points : le tour ne rapporte rien`,
     }
   }
 
