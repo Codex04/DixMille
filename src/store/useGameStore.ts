@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createPreset, normalizeAmounts, type Preset } from '../domain/preset'
-import { nextPlayerIndex, detectWinner } from '../domain/score'
+import { detectWinner, indexOfPlayer, playerIndexAfter } from '../domain/score'
 import type { Game, GameId, PersistedState, PlayerId, Settings } from '../domain/types'
 import { createId } from '../lib/id'
 import type { MigrationReport } from '../storage/migrate'
@@ -109,7 +109,11 @@ export const useGameStore = create<GameStore>((set, get) => {
           ...game.turns,
           { id: createId(), playerId, points, at: new Date().toISOString() },
         ]
-        const updated: Game = { ...game, turns, currentPlayerIndex: nextPlayerIndex(game) }
+        const updated: Game = {
+          ...game,
+          turns,
+          currentPlayerIndex: playerIndexAfter(game, playerId),
+        }
 
         // Le premier à franchir la cible est figé : les tours suivants ne
         // doivent pas pouvoir lui reprendre la victoire.
@@ -126,16 +130,17 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     undoLastTurn(gameId) {
       replaceGame(gameId, (game) => {
-        if (game.turns.length === 0) return game
+        const undone = game.turns[game.turns.length - 1]
+        if (!undone) return game
+
         const turns = game.turns.slice(0, -1)
         const updated: Game = {
           ...game,
           turns,
-          // Rendre la main au joueur dont on vient d'annuler le tour.
-          currentPlayerIndex:
-            game.players.length === 0
-              ? 0
-              : (game.currentPlayerIndex - 1 + game.players.length) % game.players.length,
+          // Rendre la main au joueur dont on vient d'annuler le tour, en
+          // repartant de son identifiant plutôt que d'un décrément d'index
+          // — les tours ne se suivent pas forcément dans l'ordre du tableau.
+          currentPlayerIndex: indexOfPlayer(game, undone.playerId),
         }
         delete updated.winnerPlayerId
         delete updated.finishedAt

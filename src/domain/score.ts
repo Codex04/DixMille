@@ -97,6 +97,26 @@ export function nextPlayerIndex(game: Game): number {
   return (game.currentPlayerIndex + 1) % game.players.length
 }
 
+/**
+ * Index du joueur suivant celui qui vient de jouer.
+ *
+ * Le tour avance depuis le joueur ayant réellement marqué, et non depuis
+ * l'index courant : n'importe quelle ligne du tableau étant cliquable, une
+ * saisie hors tour ferait sinon repointer sur le joueur qui vient de jouer.
+ */
+export function playerIndexAfter(game: Game, playerId: PlayerId): number {
+  if (game.players.length === 0) return 0
+  const played = game.players.findIndex((player) => player.id === playerId)
+  if (played < 0) return nextPlayerIndex(game)
+  return (played + 1) % game.players.length
+}
+
+/** Index d'un joueur, ou l'index courant s'il est introuvable. */
+export function indexOfPlayer(game: Game, playerId: PlayerId): number {
+  const found = game.players.findIndex((player) => player.id === playerId)
+  return found >= 0 ? found : game.currentPlayerIndex
+}
+
 /** Tours d'un joueur, dans l'ordre chronologique. */
 export function turnsOf(game: Game, playerId: PlayerId): Game['turns'] {
   return game.turns.filter((turn) => turn.playerId === playerId)

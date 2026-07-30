@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { DIX_MILLE_PRESET } from '../../src/domain/preset'
-import { currentPlayer, detectWinner, progression, scoreOf, standings } from '../../src/domain/score'
+import {
+  currentPlayer,
+  detectWinner,
+  indexOfPlayer,
+  playerIndexAfter,
+  progression,
+  scoreOf,
+  standings,
+} from '../../src/domain/score'
 import type { Game, Turn } from '../../src/domain/types'
 
 function gameWith(turns: Array<[playerId: string, points: number]>): Game {
@@ -126,6 +134,37 @@ describe('tour de table', () => {
     const game = { ...gameWith([]), currentPlayerIndex: 3 }
 
     expect(currentPlayer(game)?.name).toBe('Quentin')
+  })
+
+  it('passe au joueur suivant celui qui vient de jouer', () => {
+    const game = gameWith([])
+
+    expect(playerIndexAfter(game, 'p1')).toBe(1)
+    expect(playerIndexAfter(game, 'p2')).toBe(2)
+  })
+
+  it('reboucle après le dernier joueur', () => {
+    expect(playerIndexAfter(gameWith([]), 'p3')).toBe(0)
+  })
+
+  it('avance depuis le joueur ayant marqué, même hors de son tour', () => {
+    // Toutes les lignes du tableau sont cliquables : saisir le score de
+    // Julie alors que c'est à Quentin doit rendre la main à Quentin, pas
+    // laisser le tour sur Julie.
+    const game = { ...gameWith([]), currentPlayerIndex: 0 }
+
+    expect(playerIndexAfter(game, 'p3')).toBe(0)
+  })
+
+  it('retrouve l’index d’un joueur pour l’annulation', () => {
+    expect(indexOfPlayer(gameWith([]), 'p2')).toBe(1)
+  })
+
+  it('conserve l’index courant si le joueur est inconnu', () => {
+    const game = { ...gameWith([]), currentPlayerIndex: 2 }
+
+    expect(indexOfPlayer(game, 'inexistant')).toBe(2)
+    expect(playerIndexAfter(game, 'inexistant')).toBe(0)
   })
 })
 
