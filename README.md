@@ -1,20 +1,32 @@
-# Dix-Mille
+# Ardoise
 
-Compteur de points pour le jeu du Dix-Mille, avec aide au calcul des combinaisons.
-App statique, sans serveur : <https://codex04.github.io/DixMille/>
+Compteur de points pour vos jeux de société. App statique, sans serveur.
+
+Chaque jeu est décrit par un **preset** : un nom, un objectif de score, et une
+liste de montants proposés en saisie rapide. Le Dix-Mille est fourni d'origine
+comme preset par défaut ; les autres se créent depuis les réglages, et se
+partagent par lien.
 
 ## ⚠️ À lire avant de toucher à l'hébergement
 
 Les parties des utilisateurs sont stockées dans le `localStorage` du navigateur,
 lié à l'**origine** `https://codex04.github.io` — pas au chemin.
 
-- ✅ Redéployer sur le même compte GitHub Pages conserve les données, **même en
-  renommant le dépôt** (le `/DixMille/` ne fait pas partie de l'origine).
+- ✅ Renommer le dépôt ne perd **aucune** donnée : le chemin `/<dépôt>/` ne fait
+  pas partie de l'origine. Il faut simplement relancer le workflow après le
+  renommage, pour que le site soit rebâti avec le bon chemin de base.
 - ❌ Basculer vers un domaine personnalisé, Netlify, Vercel ou Cloudflare Pages
   **détruit l'historique de tous les utilisateurs**, sans avertissement.
 
-Si un domaine personnalisé devient nécessaire un jour : laisser les gens exporter
-leurs parties depuis « Règles et réglages » → *Exporter*, puis basculer.
+Si un domaine personnalisé devient nécessaire un jour : laisser les gens
+sauvegarder depuis « Réglages » → *Sauvegarder*, puis basculer.
+
+### Les clés de stockage gardent l'ancien nom
+
+Le `localStorage` utilise le préfixe `dixmille:v2:`, hérité du nom d'origine de
+l'app. C'est de la **donnée**, pas de la marque : renommer ces clés rendrait
+invisible l'historique de tous les utilisateurs existants. Elles restent donc
+telles quelles.
 
 ## Développement
 
@@ -33,20 +45,25 @@ npm test
 Le premier `npm install` génère `package-lock.json` : il doit être committé,
 la CI utilise `npm ci`.
 
+En local le site est servi à la racine. En production, le chemin de base est
+injecté par la CI via `VITE_BASE`, à partir du nom du dépôt — il n'est écrit
+en dur nulle part.
+
 ## Déploiement
 
-Le workflow `.github/workflows/deploy.yml` vérifie (typecheck, tests, build) à
-chaque push sur `main`, mais **ne publie que sur déclenchement manuel**
-(`workflow_dispatch`), le temps de valider la bascule.
+`.github/workflows/deploy.yml` vérifie (typecheck, tests, build) puis publie
+**à chaque push sur `main`**. Les pull requests sont vérifiées mais jamais
+publiées.
 
-Avant la première publication, régler la source de GitHub Pages sur
-« GitHub Actions » dans les paramètres du dépôt : elle pointe encore sur la
-branche `gh-pages` produite par l'ancienne version Blazor.
+Prérequis, une seule fois : dans *Settings → Pages* du dépôt, régler la source
+sur **GitHub Actions** (et non « Deploy from a branch »). Sans ça, le job de
+déploiement échoue.
 
-## Migration depuis la version Blazor
+## Migration depuis l'ancienne version Blazor
 
 L'app lit au premier démarrage les clés `game-1`, `game-2`… écrites par
-l'ancienne version, et les convertit dans son propre format.
+l'ancienne version, et les convertit dans son propre format. Les parties
+importées reçoivent le preset Dix-Mille.
 
 Garanties :
 
@@ -55,37 +72,34 @@ Garanties :
 - la migration est idempotente et se rejoue sans créer de doublon ;
 - une entrée illisible est ignorée et signalée, sans empêcher le démarrage.
 
-### Retour arrière
+Le code Blazor a été supprimé du dépôt ; il reste accessible dans l'historique
+git, au commit `407322b` et avant.
 
-L'ancienne app reste déployable via le workflow `main.yml` (`workflow_dispatch`),
-et la branche `gh-pages` est intacte. En revanche sa page Historique
-désérialise **toutes** les clés du `localStorage` et lèverait une exception sur
-les clés `dixmille:v2:*`. Un retour arrière suppose donc de les purger, dans la
-console du navigateur :
+## Partage et sauvegarde
 
-```js
-Object.keys(localStorage).filter(k => k.startsWith('dixmille:v2:')).forEach(k => localStorage.removeItem(k))
-```
+- **Partager mes jeux** encode les presets dans un lien (`/importer#jeux=…`) et
+  ouvre la feuille de partage native. Le contenu d'un lien est une entrée non
+  fiable : il est revalidé et borné à la lecture, et l'import demande toujours
+  une confirmation explicite.
+- **Sauvegarder / Restaurer** manipule un fichier JSON contenant parties *et*
+  jeux. La restauration n'ajoute que ce qui manque et n'écrase jamais un
+  réglage local.
 
-Le code Blazor est conservé dans `DixMille/` tant que la version React n'est pas
-validée en production.
+## Le preset Dix-Mille
 
-## Règles
-
-Table de points par défaut, entièrement modifiable dans l'app :
-
-| Combinaison | Points |
+| Champ | Valeur |
 | --- | --- |
-| Un `1` | 100 |
-| Un `5` | 50 |
-| Brelan de `1` | 1000 |
-| Brelan de `X` | `X` × 100 |
-| Carré | brelan × 2 |
-| Cinq fois `X` | `X` × 1000 |
-| Cinq `1` | 10000 |
-| Suite 1-2-3-4-5-6 | 1500 (désactivée) |
-| Trois paires | 750 (désactivée) |
+| Objectif | 10 000 |
+| Montants rapides | 50, 100, 400, 500, 1000 |
+| Minimum par tour | 400 |
+| Pas de score | 10 |
 
-Un tour doit rapporter **au moins 400 points** pour être enregistré ; en dessous,
-il compte pour zéro. Après un *hot dice*, la relance peut faire perdre des
-points : la saisie négative est prévue pour ça.
+Deux règles propres au Dix-Mille, portées par le preset et **absentes des
+nouveaux presets** (minimum à 0, pas à 1) :
+
+- un tour doit rapporter **au moins 400 points** pour être enregistré ; en
+  dessous il compte pour zéro ;
+- les scores sont des multiples de 10.
+
+Un tour peut faire perdre des points : la saisie négative existe pour ça, quel
+que soit le preset.

@@ -1,9 +1,5 @@
 name: build & deploy
 
-# Contrairement à l'ancien workflow (`on: [push]`, qui publiait en
-# production depuis n'importe quelle branche), rien n'est déployé
-# automatiquement : la vérification tourne à chaque push, la publication
-# reste un geste manuel.
 on:
   push:
     branches: [main]
@@ -29,22 +25,25 @@ jobs:
           node-version: 22
           cache: npm
 
-      # Nécessite package-lock.json committé : il est généré au premier
-      # `npm install` en local.
       - run: npm ci
 
       - run: npm run typecheck
       - run: npm test
+
+      # Le chemin de base suit le nom du dépôt : GitHub Pages sert le site
+      # depuis /<nom-du-depot>/. Renommer le dépôt suffit donc, sans toucher
+      # au code — il faut simplement relancer ce workflow ensuite.
       - run: npm run build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
-    # Publication uniquement sur déclenchement manuel, le temps de valider
-    # la bascule depuis la version Blazor.
-    if: github.event_name == 'workflow_dispatch'
+    # Pas de publication depuis une pull request : seul `main` va en ligne.
+    if: github.event_name != 'pull_request'
     needs: check
     runs-on: ubuntu-latest
     permissions:

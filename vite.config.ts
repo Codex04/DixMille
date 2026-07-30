@@ -5,11 +5,12 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// L'app est servie depuis https://codex04.github.io/DixMille/.
-// Vite gère nativement ce sous-chemin : il n'y a plus de réécriture `sed`
-// du <base href> dans la CI, contrairement à la version Blazor.
+// GitHub Pages sert le site depuis un sous-dossier portant le nom du dépôt.
+// Ce nom est injecté par la CI (`VITE_BASE`) plutôt qu'écrit en dur : ainsi,
+// renommer le dépôt ne demande aucune modification de code, il suffit de
+// relancer un build. En local, la racine suffit.
 export default defineConfig({
-  base: '/DixMille/',
+  base: process.env.VITE_BASE ?? '/',
   plugins: [
     react(),
     tailwindcss(),
@@ -17,9 +18,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Dix-Mille',
-        short_name: 'Dix-Mille',
-        description: 'Compteur de points pour le jeu du Dix-Mille',
+        name: 'Ardoise',
+        short_name: 'Ardoise',
+        description: 'Compteur de points pour vos jeux de société',
         lang: 'fr',
         // Chemins relatifs au `base`, sinon le manifest pointe hors du sous-dossier.
         start_url: '.',
