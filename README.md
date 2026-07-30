@@ -1,34 +1,36 @@
 # Ardoise
 
-Compteur de points pour vos jeux de société. App statique, sans serveur.
+### 👉 **[Open the app — codex04.github.io/Ardoise](https://codex04.github.io/Ardoise/)**
 
-Chaque jeu est décrit par un **preset** : un nom, un objectif de score, et une
-liste de montants proposés en saisie rapide. Le Dix-Mille est fourni d'origine
-comme preset par défaut ; les autres se créent depuis les réglages, et se
-partagent par lien.
+A score keeper for your board and dice games. Static site, no server, works offline.
 
-## ⚠️ À lire avant de toucher à l'hébergement
+Each game is described by a **preset**: a name, a target score, and a list of
+quick-entry amounts. Dix-Mille ships as the default preset; you create the
+others from the settings screen, and share them with a link.
 
-Les parties des utilisateurs sont stockées dans le `localStorage` du navigateur,
-lié à l'**origine** `https://codex04.github.io` — pas au chemin.
+---
 
-- ✅ Renommer le dépôt ne perd **aucune** donnée : le chemin `/<dépôt>/` ne fait
-  pas partie de l'origine. Il faut simplement relancer le workflow après le
-  renommage, pour que le site soit rebâti avec le bon chemin de base.
-- ❌ Basculer vers un domaine personnalisé, Netlify, Vercel ou Cloudflare Pages
-  **détruit l'historique de tous les utilisateurs**, sans avertissement.
+## ⚠️ Read this before changing the hosting
 
-Si un domaine personnalisé devient nécessaire un jour : laisser les gens
-sauvegarder depuis « Réglages » → *Sauvegarder*, puis basculer.
+Games are stored in the browser's `localStorage`, which is bound to the
+**origin** `https://codex04.github.io` — not to the path.
 
-### Les clés de stockage gardent l'ancien nom
+- ✅ Renaming the repository loses **nothing**: the `/<repo>/` path is not part
+  of the origin. Just re-run the workflow afterwards so the site is rebuilt
+  with the right base path.
+- ❌ Moving to a custom domain, Netlify, Vercel or Cloudflare Pages **destroys
+  every user's history**, silently and irreversibly.
 
-Le `localStorage` utilise le préfixe `dixmille:v2:`, hérité du nom d'origine de
-l'app. C'est de la **donnée**, pas de la marque : renommer ces clés rendrait
-invisible l'historique de tous les utilisateurs existants. Elles restent donc
-telles quelles.
+If a custom domain ever becomes necessary: ship the change only after letting
+people back up from *Settings → Save*, then switch.
 
-## Développement
+### Storage keys keep the old name
+
+`localStorage` uses the `dixmille:v2:` prefix, inherited from the app's original
+name. That prefix is **data, not branding**: renaming those keys would hide
+every existing user's history. It stays as it is, deliberately.
+
+## Development
 
 ```bash
 npm install
@@ -42,64 +44,69 @@ npm run dev
 npm test
 ```
 
-Le premier `npm install` génère `package-lock.json` : il doit être committé,
-la CI utilise `npm ci`.
+The first `npm install` generates `package-lock.json`; it must be committed, as
+CI runs `npm ci`.
 
-En local le site est servi à la racine. En production, le chemin de base est
-injecté par la CI via `VITE_BASE`, à partir du nom du dépôt — il n'est écrit
-en dur nulle part.
+Locally the site is served from the root. In production the base path is
+injected by CI through `VITE_BASE`, derived from the repository name — it is
+hardcoded nowhere.
 
-## Déploiement
+## Deployment
 
-`.github/workflows/deploy.yml` vérifie (typecheck, tests, build) puis publie
-**à chaque push sur `main`**. Les pull requests sont vérifiées mais jamais
-publiées.
+`.github/workflows/deploy.yml` runs typecheck, tests and build, then publishes
+**on every push to `main`**. Pull requests are checked but never published.
 
-Prérequis, une seule fois : dans *Settings → Pages* du dépôt, régler la source
-sur **GitHub Actions** (et non « Deploy from a branch »). Sans ça, le job de
-déploiement échoue.
+GitHub Pages must be set to **GitHub Actions** as its source (`build_type:
+workflow`). If it is left on "deploy from a branch", Actions deployments still
+report success but a branch build silently overwrites them — the workflow shows
+green while the site never changes.
 
-## Migration depuis l'ancienne version Blazor
+## Migrating from the old Blazor version
 
-L'app lit au premier démarrage les clés `game-1`, `game-2`… écrites par
-l'ancienne version, et les convertit dans son propre format. Les parties
-importées reçoivent le preset Dix-Mille.
+On first load the app reads the `game-1`, `game-2`… keys written by the previous
+version and converts them to its own format. Imported games get the Dix-Mille
+preset.
 
-Garanties :
+Guarantees:
 
-- les clés `game-*` ne sont **jamais** supprimées ni écrasées ;
-- une copie brute est prise dans `dixmille:v2:legacyBackup` avant toute écriture ;
-- la migration est idempotente et se rejoue sans créer de doublon ;
-- une entrée illisible est ignorée et signalée, sans empêcher le démarrage.
+- `game-*` keys are **never** deleted or overwritten;
+- a raw copy is saved to `dixmille:v2:legacyBackup` before any write;
+- migration is idempotent and can replay without creating duplicates;
+- an unreadable entry is skipped and reported, without blocking startup.
 
-Le code Blazor a été supprimé du dépôt ; il reste accessible dans l'historique
-git, au commit `407322b` et avant.
+The Blazor source has been removed from the repository. It remains reachable in
+git history, at commit `407322b` and earlier.
 
-## Partage et sauvegarde
+## Sharing and backup
 
-- **Partager mes jeux** encode les presets dans un lien (`/importer#jeux=…`) et
-  ouvre la feuille de partage native. Le contenu d'un lien est une entrée non
-  fiable : il est revalidé et borné à la lecture, et l'import demande toujours
-  une confirmation explicite.
-- **Sauvegarder / Restaurer** manipule un fichier JSON contenant parties *et*
-  jeux. La restauration n'ajoute que ce qui manque et n'écrase jamais un
-  réglage local.
+- **Share my games** encodes the presets into a link (`/importer#jeux=…`) and
+  opens the native share sheet. A link is untrusted input: its contents are
+  re-validated and clamped on read, and importing always requires an explicit
+  confirmation.
+- **Save / Restore** handles a JSON file containing both games and presets.
+  Restoring only adds what is missing and never overwrites a local setting.
 
-## Le preset Dix-Mille
+## The Dix-Mille preset
 
-| Champ | Valeur |
+| Field | Value |
 | --- | --- |
-| Objectif | 10 000 |
-| Montants rapides | 50, 100, 400, 500, 1000 |
-| Minimum par tour | 400 |
-| Pas de score | 10 |
+| Target | 10,000 |
+| Quick amounts | 50, 100, 400, 500, 1000 |
+| Minimum per turn | 400 |
+| Score step | 10 |
 
-Deux règles propres au Dix-Mille, portées par le preset et **absentes des
-nouveaux presets** (minimum à 0, pas à 1) :
+Two rules specific to Dix-Mille, carried by the preset and **absent from new
+presets** (minimum 0, step 1) — imposing them on a game of tarot would make no
+sense:
 
-- un tour doit rapporter **au moins 400 points** pour être enregistré ; en
-  dessous il compte pour zéro ;
-- les scores sont des multiples de 10.
+- a turn must be worth **at least 400 points** to be recorded; below that it
+  counts as zero;
+- scores are multiples of 10.
 
-Un tour peut faire perdre des points : la saisie négative existe pour ça, quel
-que soit le preset.
+A turn can lose points, whatever the preset, so negative entry is available
+everywhere.
+
+## Stack
+
+Vite · React · TypeScript · Tailwind CSS · Zustand · Valibot · Vitest.
+Roughly 87 kB gzipped, against about 2 MB for the Blazor version it replaces.
