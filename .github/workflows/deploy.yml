@@ -17,8 +17,23 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Nécessaire à `configure-pages` pour activer Pages sur le dépôt.
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      # Bascule la source de Pages sur GitHub Actions si ce n'est pas déjà
+      # fait. Sans ça, une source « deploy from a branch » continue de servir
+      # l'ancien contenu et écrase silencieusement les déploiements de ce
+      # workflow — le job réussit, mais le site ne change pas.
+      - name: Activer GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/setup-node@v4
         with:
