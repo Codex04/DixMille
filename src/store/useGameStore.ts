@@ -46,6 +46,9 @@ interface GameStore {
    * Renvoie le nombre de parties supprimées.
    */
   clearGames: () => number
+
+  /** Supprime une partie précise de l'historique. */
+  deleteGame: (gameId: GameId) => void
 }
 
 export const useGameStore = create<GameStore>((set, get) => {
@@ -217,6 +220,15 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       commitSettings({ ...settings, presets: [...settings.presets, ...added] })
       return added.length
+    },
+
+    deleteGame(gameId) {
+      const { games, settings } = get()
+      const next = games.filter((game) => game.id !== gameId)
+      if (next.length === games.length) return
+
+      set({ games: next })
+      persist(next, settings)
     },
 
     clearGames() {

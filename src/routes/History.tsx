@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import Screen from '../components/Screen'
+import SwipeableRow from '../components/SwipeableRow'
 import { detectWinner, isFinished, scoresOf } from '../domain/score'
 import type { Game } from '../domain/types'
 import { useGameStore } from '../store/useGameStore'
@@ -28,7 +29,13 @@ function playedPresets(games: Game[]): { id: string; name: string }[] {
 export default function History() {
   const navigate = useNavigate()
   const games = useGameStore((state) => state.games)
+  const deleteGame = useGameStore((state) => state.deleteGame)
+
   const [presetFilter, setPresetFilter] = useState<string>(ALL)
+  /** Ligne actuellement ouverte par un glissement : une seule à la fois. */
+  const [openId, setOpenId] = useState<string | null>(null)
+  /** Partie dont la suppression attend confirmation. */
+  const [confirmId, setConfirmId] = useState<string | null>(null)
 
   const finished = games
     .filter(isFinished)
@@ -110,12 +117,52 @@ export default function History() {
           const totals = scoresOf(game)
           const best = winner ? (totals.get(winner.id) ?? 0) : 0
 
+          const quand = new Date(game.createdAt).toLocaleString('fr-FR', {
+            dateStyle: 'short',
+            timeStyle: 'short',
+          })
+
+          if (confirmId === game.id) {
+            return (
+              <li key={game.id} className="surface border-die-red p-4">
+                <p className="mb-1 font-semibold">Supprimer cette partie ?</p>
+                <p className="mb-4 text-sm text-cream-dim">
+                  {winner?.name ?? 'Sans gagnant'} — {game.players.map((p) => p.name).join(', ')}
+                  {' · '}
+                  {quand}. Cette action est irréversible.
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-ghost flex-1"
+                    onClick={() => setConfirmId(null)}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger flex-1"
+                    onClick={() => {
+                      deleteGame(game.id)
+                      setConfirmId(null)
+                      setOpenId(null)
+                    }}
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </li>
+            )
+          }
+
           return (
             <li key={game.id}>
-              <button
-                type="button"
-                className="surface flex w-full items-center gap-3 px-4 py-3 text-left"
-                onClick={() => navigate(`/historique/${game.id}`)}
+              <SwipeableRow
+                open={openId === game.id}
+                onOpenChange={(open) => setOpenId(open ? game.id : null)}
+                onActivate={() => navigate(`/historique/${game.id}`)}
+                onDelete={() => setConfirmId(game.id)}
+                deleteLabel={`Supprimer la partie du ${quand}`}
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{winner?.name ?? 'Sans gagnant'}</p>
@@ -131,18 +178,17 @@ export default function History() {
                   <p className="tabular font-semibold text-copper-400">
                     {best.toLocaleString('fr-FR')}
                   </p>
-                  <p className="whitespace-nowrap text-xs text-cream-dim">
-                    {new Date(game.createdAt).toLocaleString('fr-FR', {
-                      dateStyle: 'short',
-                      timeStyle: 'short',
-                    })}
-                  </p>
+                  <p className="whitespace-nowrap text-xs text-cream-dim">{quand}</p>
                 </div>
-              </button>
+              </SwipeableRow>
             </li>
           )
         })}
       </ul>
+
+      <p className="mt-4 text-center text-xs text-cream-dim">
+        Glisse une partie vers la gauche pour la supprimer.
+      </p>
     </Screen>
   )
 }
